@@ -15,9 +15,7 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->dateTime('start_time');
-            $table->dateTime('stop_time');
+            $table->string('room_name');
             $table->timestamps();
         });
     }

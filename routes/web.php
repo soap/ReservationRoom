@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReserveController;
 use App\Http\Controllers\RoomController;
 
 /*
@@ -14,6 +15,7 @@ use App\Http\Controllers\RoomController;
 |
 */
 
+Route::resource('reserve',ReserveController::class);
 Route::resource('room',RoomController::class);
 
 Route::get('/', function () {
