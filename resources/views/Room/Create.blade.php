@@ -24,8 +24,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="from-group">
-                        <strong>Convention Room Name</strong>
-                        <input type="text" name="name" class="form-control" placeholder="Convention Room Name">
+                        <strong>Reserve Name</strong>
+                        <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Convention Room Name">
+
 
                         @error('name')
                         <div class="alert alert-danger">{{$message}}</div>
