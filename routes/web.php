@@ -18,6 +18,10 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
+Route::resource('reserve',ReserveController::class);
+Route::resource('room',RoomController::class);
+Route::get('/room/{room}/reserve',[RoomController::class,"reserve"])->name('room.reserve');
+
 
 Route::get('/', function () {
     return view('welcome');
