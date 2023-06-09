@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
+use App\Http\Controllers\Admin\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +17,7 @@ use App\Http\Controllers\RoomController;
 |
 */
 
-Route::resource('room',RoomController::class);
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,3 +26,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    //protected routes
+    Route::middleware(['auth'])->group(function() {
+        Route::get('/', DashboardController::class)->name('home');
+        Route::get('/dashboard', DashboardController::class)->name('dashboard');
+        Route::resource('room',RoomController::class);
+    });
+    
+});
