@@ -38,8 +38,8 @@ class ReserveController extends Controller
         return redirect()->route('reserve.index')->with('success', 'Reserve has been created successfully.');
     }
 
-    public function edit(Reserve $room){
-        return view('reserve.edit', compact('room'));
+    public function edit(Reserve $reserve){
+        return view('reserve.edit', compact('reserve'));
     }
 
     public function update(Request $request, $id){
@@ -61,8 +61,8 @@ class ReserveController extends Controller
         return redirect()->route('reserve.index')->with('success', 'Reserve has been update successfully.');
     }
 
-    public function destroy(Reserve $room){
-        $room->delete();
+    public function destroy(Reserve $reserve){
+        $reserve->delete();
         return redirect()->route('reserve.index')->with('success', 'Reserve has been delete successfully.');
     }
 

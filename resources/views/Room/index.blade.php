@@ -26,7 +26,8 @@
                 <td>{{$room->room_name}}</td>
                 <td>
                     <form action="{{route('room.destroy', $room->id)}}" method="post">
-                        <a href="{{route('room.edit', $room->id)}}" class="btn btn-warning">EDIT</a>
+                        <a href="{{ route('room.reserve', $room->id) }}" class="btn btn-info">RESERVE</a>
+                        <a href="{{ route('room.edit', $room->id) }}" class="btn btn-warning">EDIT</a>
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">DELETE</button>
