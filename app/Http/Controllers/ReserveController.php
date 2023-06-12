@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Reserve;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Spatie\Period\Period;
+use Spatie\Period\Precision;
+use Spatie\Period\Boundaries;
 
 class ReserveController extends Controller
 {
@@ -20,6 +24,20 @@ class ReserveController extends Controller
     }
 
     public function store(Request $request){
+        $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
+        $stop_str = Carbon::parse("{$request->date} {$request->stop_time}")->format('Y-m-d H:i:s');
+
+        //check period from db
+        $checkperiod = DB::select('select * from reserves');
+        foreach ($checkperiod as $period) {
+            $a = Period::make($period->start_time, $period->start_time, Precision::HOUR());
+            $b = Period::make($start_str, $stop_str,Precision::HOUR());
+            if (($a->overlapsWith($b))== true){
+                return redirect()->route('reserve.create')->with('time_error', 'The selected time has already been reserved. please try again.');
+            }
+        }
+
+        //validate input data
         $todayDate = date('m/d/Y');
         $request->validate([
             'name'=> ['required','string'],
@@ -27,14 +45,13 @@ class ReserveController extends Controller
             'start_time' => ['nullable','date_format:H:i'],
             'stop_time' => ['nullable','date_format:H:i','after:start_time']
         ]);
-        $start_str = "{$request->date} {$request->start_time}";
-        $stop_str = "{$request->date} {$request->stop_time}";
 
-        $room = new Reserve;
-        $room->name = $request->name;
-        $room->start_time = Carbon::parse($start_str)->format('Y-m-d H:i:s');
-        $room->stop_time = Carbon::parse($stop_str)->format('Y-m-d H:i:s');
-        $room->save();
+        //create data
+        $reserve = new Reserve;
+        $reserve->name = $request->name;
+        $reserve->start_time = $start_str;
+        $reserve->stop_time = $stop_str;
+        $reserve->save();
         return redirect()->route('reserve.index')->with('success', 'Reserve has been created successfully.');
     }
 
@@ -43,6 +60,20 @@ class ReserveController extends Controller
     }
 
     public function update(Request $request, $id){
+        $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
+        $stop_str = Carbon::parse("{$request->date} {$request->stop_time}")->format('Y-m-d H:i:s');
+
+        //check period from db
+        $checkperiod = DB::select('select * from reserves');
+        foreach ($checkperiod as $period) {
+            $a = Period::make($period->start_time, $period->start_time, Precision::HOUR());
+            $b = Period::make($start_str, $stop_str,Precision::HOUR());
+            if (($a->overlapsWith($b))== true){
+                return redirect()->route('reserve.create')->with('time_error', 'The selected time has already been reserved. please try again.');
+            }
+        }
+
+        //validate input data
         $todayDate = date('m/d/Y');
         $request->validate([
             'name'=> ['required','string'],
@@ -50,14 +81,12 @@ class ReserveController extends Controller
             'start_time' => ['nullable','date_format:H:i'],
             'stop_time' => ['nullable','date_format:H:i','after:start_time']
         ]);
-        $start_str = "{$request->date} {$request->start_time}";
-        $stop_str = "{$request->date} {$request->stop_time}";
-
-        $room = Reserve::find($id);
-        $room->name = $request->name;
-        $room->start_time = Carbon::parse($start_str)->format('Y-m-d H:i:s');
-        $room->stop_time = Carbon::parse($stop_str)->format('Y-m-d H:i:s');
-        $room->save();
+        
+        $reserve = Reserve::find($id);
+        $reserve->name = $request->name;
+        $reserve->start_time = Carbon::parse($start_str)->format('Y-m-d H:i:s');
+        $reserve->stop_time = Carbon::parse($stop_str)->format('Y-m-d H:i:s');
+        $reserve->save();
         return redirect()->route('reserve.index')->with('success', 'Reserve has been update successfully.');
     }
 

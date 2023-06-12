@@ -9,16 +9,6 @@
         <div>
             <a href="{{route('reserve.index')}}" class="btn btn-primary">Back</a>
         </div>
-        @if ($message=Session::get('success'))
-        <div class="alert alert-success">
-            <p> {{$message}}</p>
-        </div>
-        @endif
-        @if (session('status'))
-        <div class="alert alert-success">
-            {{ session('status')}}
-        </div>
-        @endif
         <form action="{{route('reserve.store')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
@@ -36,7 +26,8 @@
                 <div class="col-md-12">
                     <div class="from-group">
                         <strong>Date</strong>
-                        <input type="date" name="date" class="form-control" placeholder="date">
+                        <input type="date" name="date" value="{{ old('name') }}" class="form-control"
+                            placeholder="date">
                         @error('stopTime')
                         <div class="alert alert-danger">{{$message}}</div>
                         @enderror
@@ -96,6 +87,19 @@
                         </select>
                     </div>
                 </div>
+                @if ($message=Session::get('time_error'))
+                <div class="alert alert-danger">
+                    <p> {{$message}}</p>
+                </div>
+                @elseif ($message=Session::get('success'))
+                <div class="alert alert-success">
+                    <p> {{$message}}</p>
+                </div>
+                @elseif (session('status'))
+                <div class="alert alert-success">
+                    {{ session('status')}}
+                </div>
+                @endif
                 <div class="col-md-12">
                     <button type="submit" class="mt-3 btn btn-primary">Submit</button>
                 </div>
