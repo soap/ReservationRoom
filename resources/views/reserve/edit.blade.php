@@ -31,6 +31,12 @@
                 </div>
                 <div class="col-md-12">
                     <div class="from-group">
+                        <h1>{{$reserve->room_id}}</h1>
+                        <input type="hidden" name="room_id" value="{{$reserve->room_id}}">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="from-group">
                         <strong>Date</strong>
                         <input type="date" name="date" class="form-control" placeholder="date">
                         @error('date')

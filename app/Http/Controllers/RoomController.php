@@ -50,6 +50,6 @@ class RoomController extends Controller
     }
 
     public function reserve(Room $room){
-        return view('reserve.create');
+        return view('reserve.create', ['room_id' => $room->id]);
     }
 }
