@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Spatie\Period\Period;
 use Spatie\Period\Precision;
-use App\Http\Requests\ValidatePeriod;
+use App\Http\Requests\ValidateReserve;
 
 class ReserveController extends Controller
 {
@@ -22,7 +22,7 @@ class ReserveController extends Controller
         return view('reserve.create');
     }
 
-    public function store(ValidatePeriod $request)
+    public function store(ValidateReserve $request)
     {
         $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
         $stop_str = Carbon::parse("{$request->date} {$request->stop_time}")->format('Y-m-d H:i:s');
@@ -52,7 +52,7 @@ class ReserveController extends Controller
         return view('reserve.edit', compact('reserve'));
     }
 
-    public function update(ValidatePeriod $request, $id)
+    public function update(ValidateReserve $request, $id)
     {
 
         $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
