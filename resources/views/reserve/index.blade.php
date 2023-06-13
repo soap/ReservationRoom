@@ -7,7 +7,7 @@
             <h2>Laravel CRUD Example</h2>
         </div>
         <div>
-            <a href="{{route('reserve.create')}}" class="btn btn-success mb-3">Reserve Room</a>
+            <a href="{{route('reserve.create', 'room_id')}}" class="btn btn-success mb-3">Reserve Room</a>
         </div>
         @if ($message=Session::get('success'))
         <div class="alert alert-success">
@@ -18,6 +18,7 @@
             <tr>
                 <th>No.</th>
                 <th>Name</th>
+                <th>room_id</th>
                 <th>Start Time</th>
                 <th>Stop Time</th>
                 <th width="280px">Action</th>
@@ -26,6 +27,7 @@
             <tr>
                 <td>{{$reserve->id}}</td>
                 <td>{{$reserve->name}}</td>
+                <td>{{$reserve->room_id}}</td>
                 <td>{{$reserve->start_time}}</td>
                 <td>{{$reserve->stop_time}}</td>
                 <td>

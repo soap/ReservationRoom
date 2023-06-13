@@ -22,6 +22,13 @@ class RoomController extends Controller
         $request->validate([
             'name'=> ['required','string']
         ]);
+        
+        $checkroom = Room::all();
+        foreach ($checkroom as $room) {
+            if ($room->room_name == $request->name) {
+                return redirect()->route('room.create')->with('error', 'That room is taken. Try another.');
+            }
+        }
 
         $room = new Room;
         $room->room_name = $request->name;
@@ -38,6 +45,13 @@ class RoomController extends Controller
             'name'=> ['required','string']
         ]);
 
+        $checkroom = Room::all();
+        foreach ($checkroom as $room) {
+            if ($room->room_name == $request->name) {
+                return redirect()->route('room.create')->with('error', 'That room is taken. Try another.');
+            }
+        }
+
         $room = Room::find($id);;
         $room->room_name = $request->name;
         $room->save();
@@ -50,6 +64,6 @@ class RoomController extends Controller
     }
 
     public function reserve(Room $room){
-        return view('reserve.create');
+        return view('reserve.create', ['room_id' => $room->id]);
     }
 }

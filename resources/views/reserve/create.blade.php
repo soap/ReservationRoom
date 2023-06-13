@@ -25,6 +25,12 @@
                 </div>
                 <div class="col-md-12">
                     <div class="from-group">
+                        <h1>{{$room_id}}</h1>
+                        <input type="hidden" name="room_id" value={{$room_id}}>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="from-group">
                         <strong>Date</strong>
                         <input type="date" name="date" value="{{ old('name') }}" class="form-control"
                             placeholder="date">
