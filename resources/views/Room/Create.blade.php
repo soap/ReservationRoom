@@ -25,7 +25,8 @@
                 <div class="col-md-12">
                     <div class="from-group">
                         <strong>Reserve Name</strong>
-                        <input type="text" name="name" value="{{ old('name') }}" class="form-control" placeholder="Convention Room Name">
+                        <input type="text" name="name" value="{{ old('name') }}" class="form-control"
+                            placeholder="Convention Room Name">
 
 
                         @error('name')
@@ -33,6 +34,11 @@
                         @enderror
                     </div>
                 </div>
+                @if ($message=Session::get('error'))
+                <div class="alert alert-danger col-md-12">
+                    <p> {{$message}}</p>
+                </div>
+                @endif
                 <div class="col-md-12">
                     <button type="submit" class="mt-3 btn btn-primary">Submit</button>
                 </div>
