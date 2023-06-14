@@ -18,6 +18,7 @@ use App\Http\Controllers\RoomController;
 Route::resource('reserve',ReserveController::class);
 Route::resource('room',RoomController::class);
 Route::get('/room/{room}/reserve',[RoomController::class,"reserve"])->name('room.reserve');
+Route::get('/test',[RoomController::class,"getCalendaEvents"])->name('room.calendar');
 
 Route::get('/', function () {
     return view('welcome');

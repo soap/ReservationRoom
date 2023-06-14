@@ -3,14 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Models\Reserve;
 use Illuminate\Http\Request;
+use App\Http\Requests\ValidateRoom;
 
 class RoomController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data['Room'] = Room::orderBy('id', 'asc')->paginate(5);
-        return view('room.index', $data);
+        $data_room['Room'] = Room::orderBy('id', 'asc')->paginate(5);
+
+        // if ($request->ajax()) {
+        //     $data = Reserve::where('id', '>', 1)
+        //         ->get(['id', 'name', 'start_time', 'stop_time']);
+        //     return response()->json($data);
+        // }
+            
+        $events = Reserve::orderBy('id', 'asc')->get();
+        if ($request->ajax()) {
+            foreach ($events as $event) {
+                $arr_event = ['title' => $event->name, 'start' => $event->start_time, 'end' => $event->stop_time];
+            }
+            return response()->json($arr_event);
+        }
+
+        return view('room.index', $data_room);
+    }
+
+    public function getCalendaEvents(Request $request)
+    {
+        $events = Reserve::orderBy('id', 'asc')->get();
+        $json_event=[];
+        foreach ($events as $event) {
+            $arr_event = ['title' => $event->name, 'start' => $event->start_time, 'end' => $event->stop_time];
+            array_push($json_event,$arr_event);
+        }
+        return json_encode($json_event);
     }
 
     public function create()
@@ -18,17 +46,8 @@ class RoomController extends Controller
         return view('room.create');
     }
 
-    public function store(Request $request){
-        $request->validate([
-            'name'=> ['required','string']
-        ]);
-        
-        $checkroom = Room::all();
-        foreach ($checkroom as $room) {
-            if ($room->room_name == $request->name) {
-                return redirect()->route('room.create')->with('error', 'That room is taken. Try another.');
-            }
-        }
+    public function store(ValidateRoom $request)
+    {
 
         $room = new Room;
         $room->room_name = $request->name;
@@ -36,34 +55,29 @@ class RoomController extends Controller
         return redirect()->route('room.index')->with('success', 'Reserve has been created successfully.');
     }
 
-    public function edit(Room $room){
+    public function edit(Room $room)
+    {
         return view('Room.edit', compact('room'));
     }
 
-    public function update(Request $request, $id){
-        $request->validate([
-            'name'=> ['required','string']
-        ]);
+    public function update(ValidateRoom $request, $id)
+    {
 
-        $checkroom = Room::all();
-        foreach ($checkroom as $room) {
-            if ($room->room_name == $request->name) {
-                return redirect()->route('room.create')->with('error', 'That room is taken. Try another.');
-            }
-        }
-
-        $room = Room::find($id);;
+        $room = Room::find($id);
+        ;
         $room->room_name = $request->name;
         $room->save();
         return redirect()->route('room.index')->with('success', 'Room has been update successfully.');
     }
 
-    public function destroy(Room $room){
+    public function destroy(Room $room)
+    {
         $room->delete();
         return redirect()->route('room.index')->with('success', 'Room has been delete successfully.');
     }
 
-    public function reserve(Room $room){
+    public function reserve(Room $room)
+    {
         return view('reserve.create', ['room_id' => $room->id]);
     }
 }

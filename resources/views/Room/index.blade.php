@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
+
+
 <div class="container" mt-2>
     <div class="row">
         <div class="col-lg-12 text-center">
@@ -38,5 +44,32 @@
         </table>
         {!!$Room->links('pagination::bootstrap-5')!!}
     </div>
+    <div id='calendar'></div>
 </div>
+<script>
+    $(document).ready(function () {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var calendar = $('#calendar').fullCalendar({
+            editable: true,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            events: "{{route('room.calendar')}}",
+            displayEventTime: false,
+            editable: true,
+            selectable: true,
+            selectHelper: true,
+            theme: true,
+            themeSystem: 'bootstrap4',
+        });
+    });
+</script>
 @endsection
