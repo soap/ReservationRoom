@@ -56,7 +56,6 @@
         });
 
         var calendar = $('#calendar').fullCalendar({
-            editable: true,
             header: {
                 left: 'prev,next today',
                 center: 'title',
@@ -64,7 +63,6 @@
             },
             events: "{{route('room.calendar')}}",
             displayEventTime: false,
-            editable: true,
             selectable: true,
             selectHelper: true,
             theme: true,

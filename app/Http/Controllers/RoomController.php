@@ -13,20 +13,6 @@ class RoomController extends Controller
     {
         $data_room['Room'] = Room::orderBy('id', 'asc')->paginate(5);
 
-        // if ($request->ajax()) {
-        //     $data = Reserve::where('id', '>', 1)
-        //         ->get(['id', 'name', 'start_time', 'stop_time']);
-        //     return response()->json($data);
-        // }
-            
-        $events = Reserve::orderBy('id', 'asc')->get();
-        if ($request->ajax()) {
-            foreach ($events as $event) {
-                $arr_event = ['title' => $event->name, 'start' => $event->start_time, 'end' => $event->stop_time];
-            }
-            return response()->json($arr_event);
-        }
-
         return view('room.index', $data_room);
     }
 
@@ -35,7 +21,7 @@ class RoomController extends Controller
         $events = Reserve::orderBy('id', 'asc')->get();
         $json_event=[];
         foreach ($events as $event) {
-            $arr_event = ['title' => $event->name, 'start' => $event->start_time, 'end' => $event->stop_time];
+            $arr_event = ['title' => $event->name.' '.$event->room_id, 'start' => $event->start_time, 'end' => $event->stop_time];
             array_push($json_event,$arr_event);
         }
         return json_encode($json_event);
