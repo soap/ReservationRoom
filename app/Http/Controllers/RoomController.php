@@ -21,26 +21,7 @@ class RoomController extends Controller
         $events = Reserve::orderBy('start_time', 'asc')->get();
         $json_event=[];
         foreach ($events as $event) {
-            switch ($event->room_id) {
-                case "1":
-                    $color = "#F1948A";
-                    break;
-                case "2":
-                    $color = "#82E0AA";
-                    break;
-                case "3":
-                    $color = "#A569BD";
-                    break;
-                case "4":
-                    $color = "#F4D03F";
-                    break;
-                case "5":
-                    $color = "#EB984E";
-                    break;
-                default:
-                    $color = "#85C1E9";
-            }
-            $arr_event = ['title' => $event->name.' '.date("H:i", strtotime($event->start_time)).'-'.date("H:i", strtotime($event->stop_time)), 'start' => $event->start_time, 'end' => $event->stop_time, 'color' => $color];
+            $arr_event = ['title' => $event->name.' '.date("H:i", strtotime($event->start_time)).'-'.date("H:i", strtotime($event->stop_time)), 'start' => $event->start_time, 'end' => $event->stop_time, 'color' => $event->room->color];
             array_push($json_event,$arr_event);
         }
         return json_encode($json_event);
@@ -56,6 +37,7 @@ class RoomController extends Controller
 
         $room = new Room;
         $room->room_name = $request->name;
+        $room->color= $request->color;
         $room->save();
         return redirect()->route('room.index')->with('success', 'Reserve has been created successfully.');
     }
@@ -71,6 +53,7 @@ class RoomController extends Controller
         $room = Room::find($id);
         ;
         $room->room_name = $request->name;
+        $room->color= $request->color;
         $room->save();
         return redirect()->route('room.index')->with('success', 'Room has been update successfully.');
     }

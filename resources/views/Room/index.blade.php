@@ -22,13 +22,13 @@
         @endif
         <table class="table table-bordered">
             <tr>
-                <th>No.</th>
+                <th>color</th>
                 <th>Name</th>
                 <th width="280px">Action</th>
             </tr>
             @foreach($Room as $room)
             <tr>
-                <td>{{$room->id}}</td>
+                <td style="background-color: {{$room->color}};"></td>
                 <td>{{$room->room_name}}</td>
                 <td>
                     <form action="{{route('room.destroy', $room->id)}}" method="post">

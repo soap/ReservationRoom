@@ -30,6 +30,12 @@
                     </div>
                 </div>
                 <div class="col-md-12">
+                    <div class="from-group">
+                        <strong>Room color</strong>
+                        <input type="color" name="color" class="form-control"placeholder="Convention Room Color">
+                    </div>
+                </div>
+                <div class="col-md-12">
                     <button type="submit" class="mt-3 btn btn-primary">Submit</button>
                 </div>
             </div>

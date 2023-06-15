@@ -34,6 +34,12 @@
                         @enderror
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="from-group">
+                        <strong>Room color</strong>
+                        <input type="color" name="color" class="form-control"placeholder="Convention Room Color">
+                    </div>
+                </div>
                 @if ($message=Session::get('error'))
                 <div class="alert alert-danger col-md-12">
                     <p> {{$message}}</p>
