@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReserveController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +20,7 @@ use App\Http\Controllers\RoomController;
 Route::resource('reserve',ReserveController::class);
 Route::resource('room',RoomController::class);
 Route::get('/room/{room}/reserve',[RoomController::class,"reserve"])->name('room.reserve');
-Route::get('/test',[RoomController::class,"getCalendaEvents"])->name('room.calendar');
+Route::get('/getdatacalendar',[RoomController::class,"getCalendaEvents"])->name('room.calendar');
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,3 +29,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//admin route
+Route::prefix('admin')->name('admin.')->group(function(){
+    Route::get('login', [AdminLoginController::class,'showLoginForm'])->name('login');
+
+    //admin protect route
+    Route::middleware(['auth'])->group(function(){
+        Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
+        Route::get('/',DashboardController::class)->name('home');
+        Route::get('/dashboard',DashboardController::class)->name('dashboard');
+    });
+});
