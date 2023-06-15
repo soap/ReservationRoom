@@ -18,7 +18,7 @@ class RoomController extends Controller
 
     public function getCalendaEvents(Request $request)
     {
-        $events = Reserve::orderBy('id', 'asc')->get();
+        $events = Reserve::orderBy('start_time', 'asc')->get();
         $json_event=[];
         foreach ($events as $event) {
             switch ($event->room_id) {

@@ -9,3 +9,4 @@ class Reserve extends Model
 {
     use HasFactory;
 }
+
