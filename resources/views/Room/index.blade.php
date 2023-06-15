@@ -65,8 +65,6 @@
             displayEventTime: false,
             selectable: true,
             selectHelper: true,
-            theme: true,
-            themeSystem: 'bootstrap4',
         });
     });
 </script>

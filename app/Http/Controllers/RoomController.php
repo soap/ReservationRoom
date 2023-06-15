@@ -21,7 +21,26 @@ class RoomController extends Controller
         $events = Reserve::orderBy('id', 'asc')->get();
         $json_event=[];
         foreach ($events as $event) {
-            $arr_event = ['title' => $event->name.' '.$event->room_id, 'start' => $event->start_time, 'end' => $event->stop_time];
+            switch ($event->room_id) {
+                case "1":
+                    $color = "#F1948A";
+                    break;
+                case "2":
+                    $color = "#82E0AA";
+                    break;
+                case "3":
+                    $color = "#A569BD";
+                    break;
+                case "4":
+                    $color = "#F4D03F";
+                    break;
+                case "5":
+                    $color = "#EB984E";
+                    break;
+                default:
+                    $color = "#85C1E9";
+            }
+            $arr_event = ['title' => $event->name.' '.date("H:i", strtotime($event->start_time)).'-'.date("H:i", strtotime($event->stop_time)), 'start' => $event->start_time, 'end' => $event->stop_time, 'color' => $color];
             array_push($json_event,$arr_event);
         }
         return json_encode($json_event);
