@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReserveController;
 use App\Http\Controllers\RoomController;
@@ -21,6 +21,7 @@ Route::resource('reserve',ReserveController::class);
 Route::resource('room',RoomController::class);
 Route::get('/room/{room}/reserve',[RoomController::class,"reserve"])->name('room.reserve');
 Route::get('/getdatacalendar',[RoomController::class,"getCalendaEvents"])->name('room.calendar');
+Route::get('/reserve_timeslot/{date?}',[ReserveController::class,"indextimeslot"])->name('timeslots');
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,7 +38,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
     //admin protect route
     Route::middleware(['auth'])->group(function(){
         Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
-        Route::get('/',DashboardController::class)->name('home');
-        Route::get('/dashboard',DashboardController::class)->name('dashboard');
+        Route::get('/',function (){
+            return view('admin.dashboard');
+        });
     });
 });

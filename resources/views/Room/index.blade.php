@@ -28,7 +28,7 @@
             </tr>
             @foreach($Room as $room)
             <tr>
-                <td style="background-color: {{$room->color}};"></td>
+                <td style="background-color: {{$room->color}}"></td>
                 <td>{{$room->room_name}}</td>
                 <td>
                     <form action="{{route('room.destroy', $room->id)}}" method="post">

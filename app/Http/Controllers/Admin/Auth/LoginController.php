@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/admin';
 
     /**
      * Create a new controller instance.
@@ -72,4 +72,8 @@ class LoginController extends Controller
             ? new JsonResponse([], 204)
             : redirect(route('admin.login'));
     }
+
+    // public function dashboard(){
+    //     return view('admin.dashboard');
+    // }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reserve;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Spatie\Period\Period;
@@ -83,4 +84,26 @@ class ReserveController extends Controller
         return redirect()->route('reserve.index')->with('success', 'Reserve has been delete successfully.');
     }
 
+    public function indextimeslot(Request $request, $date=null){
+        if(is_null($date)){
+            $date = Carbon::now();
+        }else{
+            $date = Carbon::parse($date);
+        }
+            $start = $date->startOfWeek(Carbon::MONDAY);
+            $weekStartDate = $start->startOfWeek()->format('Y-m-d H:i');
+        $data=[];
+        $tempdate=[];
+        for($i=0;$i<5;$i++){
+            $days_ago = gmdate("d-m-Y", strtotime("+$i days", strtotime($weekStartDate)));
+            array_push($tempdate,$days_ago);
+        }
+        $start_time = $date->format('Y-m-d H:i:s');
+        $stop_time = date('Y-m-d', strtotime($start_time .' +6 day'));
+        $data['Reservation'] = Reserve::where('start_time' ,'>', $start_time )->where('stop_time' ,'<' , $stop_time)->get();
+        $data['Date']=$tempdate;
+        $data['Room'] = Room::orderBy('id', 'asc')->get();
+
+        return view('reserve.timeslot', $data);
+    }
 }

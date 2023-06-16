@@ -51,7 +51,6 @@ class RoomController extends Controller
     {
 
         $room = Room::find($id);
-        ;
         $room->room_name = $request->name;
         $room->color= $request->color;
         $room->save();
