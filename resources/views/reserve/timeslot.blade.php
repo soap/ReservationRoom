@@ -89,48 +89,17 @@
     @foreach($Date as $date)
     <div style="display: flex; flex-direction: column; width: 100%;">
         <div style="display: flex; flex-direction: row;">
-            <div style="width: 150px; padding: 10px;background: rgb(57, 57, 255);color: white;font-size: 15px;">
+            <div style="width: 150px; padding: 10px;background: rgb(57, 57, 255);color: white;font-size: 15px;" value="{{$date}}">
                 {{$date}}
             </div>
             <div
                 style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
                 00:00</div>
+            @for ($i = strtotime('08:00') ; $i <= strtotime('19:00') ; $i = $i + 60*60)
             <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                08:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                09:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                10:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                11:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                12:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                13:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                14:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                15:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                16:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                17:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                18:00</div>
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                19:00</div>
+                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;" value="{{date('H:i A',$i)}}">
+                {{date('H:i A',$i)}}</div>
+            @endfor
             <div
                 style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
                 20:00</div>
@@ -139,7 +108,7 @@
         <div>
             <div style="display: flex; flex-direction: row;" id="myTable">
                 <div
-                    style="width: 150px; padding: 10px;border: 2px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 15px;">
+                    style="width: 150px; padding: 10px;border: 2px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 15px; "value="{{$room->room_name}}">
                     {{$room->room_name}}</div>
                 <div
                     style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
@@ -160,12 +129,16 @@
     const cells = document.querySelectorAll('.cell');
     let isDragging = false;
     let selectedCells = [];
+    let prarmiter=[];
 
     cells.forEach(cell => {
         cell.addEventListener('mousedown', () => {
             isDragging = true;
             cell.classList.add('dragging');
             selectedCells.push(cell);
+            // paramiter.push({'room': $room});
+            // paramiter.push({'date' : $date});
+            // paramiter.push({'start_time' : });
         });
 
         cell.addEventListener('mouseover', () => {
@@ -182,6 +155,7 @@
         cells.forEach(cell => {
             cell.classList.remove('dragging');
         });
+        window.location.assign(route('reserve/create',));
 
     });
 </script>
