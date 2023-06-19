@@ -55,7 +55,7 @@
     $(".datepicker").on("change", function () {
         let pickedDate = $("input").val();
         $("#showdate").text(`You picked this ${pickedDate} Date`);
-        window.location.assign(route('timeslots',moment(pickedDate,'DD/MM/YYYY').format('YYYY-MM-DD')));
+        window.location.assign(route('timeslots', moment(pickedDate, 'DD/MM/YYYY').format('YYYY-MM-DD')));
     });
 </script>
 
@@ -87,41 +87,41 @@
             Restricted</div>
     </div>
     @foreach($Date as $date)
-    <div style="display: flex; flex-direction: column; width: 100%;">
-        <div style="display: flex; flex-direction: row;">
-            <div style="width: 150px; padding: 10px;background: rgb(57, 57, 255);color: white;font-size: 15px;" value="{{$date}}">
+    <div style="display: flex; flex-direction: column; width: 100%;" class="date" value="{{$date}}">
+        <div style="display: flex; flex-direction: row; ">
+            <div style="width: 150px; padding: 10px;background: rgb(57, 57, 255);color: white;font-size: 15px;">
                 {{$date}}
             </div>
             <div
                 style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
                 00:00</div>
-            @for ($i = strtotime('08:00') ; $i <= strtotime('19:00') ; $i = $i + 60*60)
-            <div
-                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;" value="{{date('H:i A',$i)}}">
-                {{date('H:i A',$i)}}</div>
-            @endfor
-            <div
-                style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
-                20:00</div>
+            @for ($i = strtotime('08:00') ; $i <= strtotime('19:00') ; $i=$i + 60*60) <div
+                style="flex: 2; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
+                {{date('H:i',$i)}}
         </div>
-        @foreach($Room as $room)
-        <div>
-            <div style="display: flex; flex-direction: row;" id="myTable">
-                <div
-                    style="width: 150px; padding: 10px;border: 2px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 15px; "value="{{$room->room_name}}">
-                    {{$room->room_name}}</div>
-                <div
-                    style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
-                </div>
-                @for ($i = 0; $i < 24; $i++) <div class="cell">
-            </div>
-            @endfor
+        @endfor
+        <div
+            style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
+            20:00</div>
+    </div>
+    @foreach($Room as $room)
+    <div>
+        <div style="display: flex; flex-direction: row;" id="myTable">
+            <div style="width: 150px; padding: 10px;border: 2px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 15px; "
+                value="{{$room->room_name}}" class="room">
+                {{$room->room_name}}</div>
             <div style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
             </div>
+            @for ($i = strtotime('08:30') ; $i <= strtotime('20:00') ; $i=$i + 30*60) <div class="cell"
+                value="{{date('H:i',$i)}}">
         </div>
-        @endforeach
+        @endfor
+        <div style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
+        </div>
     </div>
     @endforeach
+</div>
+@endforeach
 </div>
 </div>
 
@@ -129,16 +129,38 @@
     const cells = document.querySelectorAll('.cell');
     let isDragging = false;
     let selectedCells = [];
-    let prarmiter=[];
+    let dataMousedown = [];
+    let dataMouseup = [];
+    let data = [];
 
     cells.forEach(cell => {
         cell.addEventListener('mousedown', () => {
             isDragging = true;
             cell.classList.add('dragging');
             selectedCells.push(cell);
-            // paramiter.push({'room': $room});
-            // paramiter.push({'date' : $date});
-            // paramiter.push({'start_time' : });
+            if (event.target.classList.contains("cell")) {
+                var cellValue = cell.getAttribute("value");
+
+                //get start time
+                const temptime = cellValue.split(':');
+                function convertToSeconds(temptime) {
+                    return Number(temptime[0]) * 60 * 60 + (Number(temptime[1]) - 30) * 60;
+                }
+                console.log(convertToSeconds(temptime));
+                var date = new Date(null);
+                date.setSeconds(convertToSeconds(temptime));
+                var hhmmssFormat = date.toISOString().substr(11, 5);
+                console.log(hhmmssFormat);
+
+                var roomValue = cell.parentNode.parentNode.querySelector(".room").getAttribute("value");
+                var dateValue = cell.closest(".date").getAttribute("value");
+
+                dataMousedown.room = roomValue;
+                dataMousedown.date = dateValue;
+                dataMousedown.start_time = hhmmssFormat;
+
+                console.log(dataMousedown);
+            }
         });
 
         cell.addEventListener('mouseover', () => {
@@ -155,8 +177,32 @@
         cells.forEach(cell => {
             cell.classList.remove('dragging');
         });
-        window.location.assign(route('reserve/create',));
+        if (event.target.classList.contains("cell")) {
+            var stop_time = event.target.getAttribute("value");
+            var roomValue = event.target.parentNode.parentNode.querySelector(".room").getAttribute("value");
+            var dateValue = event.target.closest(".date").getAttribute("value");
 
+            dataMouseup.room = roomValue;
+            dataMouseup.date = dateValue;
+            dataMouseup.stop_time = stop_time;
+
+            console.log(dataMouseup);
+        }
+        //check same date and room
+        if ((dataMousedown.room != dataMouseup.room) || dataMousedown.date != dataMouseup.date && isDragging == true) {
+            alert('select same room or date');
+            return false;
+        }
+        data.room = dataMousedown.room;
+        data.date = dataMousedown.date;
+        data.start_time = dataMousedown.start_time;
+        data.stop_time = dataMouseup.stop_time;
+        console.log(data);
+        // window.location.assign(route('reserve/create',));
+        //clear buffer
+        dataMousedown = [];
+        dataMouseup = [];
+        data = [];
     });
 </script>
 @endsection
