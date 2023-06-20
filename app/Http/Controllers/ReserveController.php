@@ -104,6 +104,7 @@ class ReserveController extends Controller
         $data['Date']=$tempdate;
         $data['Room'] = Room::orderBy('id', 'asc')->get();
 
+
         return view('reserve.timeslot', $data);
     }
 }

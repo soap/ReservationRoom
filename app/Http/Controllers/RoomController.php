@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\Reserve;
 use Illuminate\Http\Request;
 use App\Http\Requests\ValidateRoom;
+use stdClass;
 
 class RoomController extends Controller
 {
@@ -63,8 +64,12 @@ class RoomController extends Controller
         return redirect()->route('room.index')->with('success', 'Room has been delete successfully.');
     }
 
-    public function reserve(Room $room)
+    public function reserve(Room $rooms)
     {
-        return view('reserve.create', ['room_id' => $room->id]);
+        $data=new stdClass;
+        $data->date = $_REQUEST['date'];
+        $data->start_time = $_REQUEST['start_time'];
+        $data->stop_time = $_REQUEST['stop_time'];
+        return view('reserve.create', compact('rooms','data'));
     }
 }

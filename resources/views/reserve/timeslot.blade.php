@@ -108,20 +108,20 @@
     <div>
         <div style="display: flex; flex-direction: row;" id="myTable">
             <div style="width: 150px; padding: 10px;border: 2px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 15px; "
-                value="{{$room->room_name}}" class="room">
+                value="{{$room->id}}" class="room">
                 {{$room->room_name}}</div>
             <div style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
             </div>
-            @for ($i = strtotime('08:30') ; $i <= strtotime('20:00') ; $i=$i + 30*60) <div class="cell"
-                value="{{date('H:i',$i)}}">
+            @for ($i = strtotime('08:30') ; $i <= strtotime('20:00') ; $i=$i + 30*60) 
+                <div class="cell" value="{{date('H:i',$i)}}"></div>
+                @endfor
+                <div
+                    style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
+                </div>
         </div>
-        @endfor
-        <div style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
-        </div>
+        @endforeach
     </div>
     @endforeach
-</div>
-@endforeach
 </div>
 </div>
 
@@ -189,7 +189,7 @@
             console.log(dataMouseup);
         }
         //check same date and room
-        if ((dataMousedown.room != dataMouseup.room) || dataMousedown.date != dataMouseup.date && isDragging == true) {
+        if (((dataMousedown.room != dataMouseup.room) || dataMousedown.date != dataMouseup.date) && isDragging == false) {
             alert('select same room or date');
             return false;
         }
@@ -198,11 +198,26 @@
         data.start_time = dataMousedown.start_time;
         data.stop_time = dataMouseup.stop_time;
         console.log(data);
-        // window.location.assign(route('reserve/create',));
-        //clear buffer
+        window.location.assign(route("room.reserve", {
+            room: data.room, _query: {
+                date: data.date,
+                start_time: data.start_time,
+                stop_time: data.stop_time
+            }
+        }));
+        // clear buffer
         dataMousedown = [];
         dataMouseup = [];
         data = [];
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        myFunction();
+    });
+
+    function myFunction() {
+        alert('chat GPT');
+        console.log('เรียกใช้ฟังก์ชัน JavaScript เมื่อหน้าเว็บเปิด');
+    }
 </script>
 @endsection
