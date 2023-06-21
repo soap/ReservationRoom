@@ -33,7 +33,7 @@
                     <div class="from-group">
                         <strong>Date</strong>
                         <strong>{{$data->date}}</strong><Br>
-                        <input type="date" name="date" class="form-control" placeholder="date" value="{{$data->date}}" disabled>
+                            <input type="date" name="date" class="form-control" value="{{$data->date}}" placeholder="date">
                         @error('stopTime')
                         <div class="alert alert-danger">{{$message}}</div>
                         @enderror

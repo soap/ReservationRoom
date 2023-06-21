@@ -27,7 +27,7 @@ class ReserveController extends Controller
     {
         $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
         $stop_str = Carbon::parse("{$request->date} {$request->stop_time}")->format('Y-m-d H:i:s');
-
+        // dd($request->date,$start_str,$stop_str);
         //check period from db
         $checkperiod = Reserve::where('room_id',$request->room_id)->get();
         foreach ($checkperiod as $period) {
