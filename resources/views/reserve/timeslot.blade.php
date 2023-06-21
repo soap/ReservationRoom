@@ -117,8 +117,11 @@
                 @php
                 $dateTime = \Carbon\Carbon::parse($date . ' ' . date('H:i', $i));
                 $cellStyle = '';
+                $now = date('Y-m-d H:i',strtotime('+7 hours'));
                 foreach ($Reservations as $reservation) {
-                    if (($dateTime > $reservation->start_time && $dateTime <= $reservation->stop_time) && $room->id == $reservation->room_id) {
+                    if($dateTime < $now) {
+                        $cellStyle = 'background: rgb(118, 118, 118)';
+                    }elseif (($dateTime > $reservation->start_time && $dateTime <= $reservation->stop_time) && $room->id == $reservation->room_id) {
                         $cellStyle = 'background: rgb(66, 135, 255)';
                         break;
                     }

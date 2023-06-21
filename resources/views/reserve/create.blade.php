@@ -32,9 +32,12 @@
                 <div class="col-md-12">
                     <div class="from-group">
                         <strong>Date</strong>
-                        <strong>{{$data->date}}</strong><Br>
-                            <input type="date" name="date" class="form-control" value="{{$data->date}}" placeholder="date">
-                        @error('stopTime')
+                        @php
+                        $formatteddate = \Carbon\Carbon::parse($data->date)->format('m-d-Y');
+                        @endphp
+                        <strong>{{$formatteddate}}</strong><br>
+                        <input type="date" name="date" class="form-control" value="{{$formatteddate}}" placeholder="date">
+                        @error('date')
                         <div class="alert alert-danger">{{$message}}</div>
                         @enderror
                     </div>
