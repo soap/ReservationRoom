@@ -25,8 +25,8 @@
                 </div>
                 <div class="col-md-12">
                     <div class="from-group">
-                        <h1>{{$rooms->id}}</h1>
-                        <input type="hidden" name="room_id" value="{{$rooms->id}}">
+                        <h1>{{$room->id}}</h1>
+                        <input type="hidden" name="room_id" value="{{$room->id}}">
                     </div>
                 </div>
                 <div class="col-md-12">

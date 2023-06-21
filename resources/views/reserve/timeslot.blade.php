@@ -86,7 +86,7 @@
             style="background:rgb(255, 205, 205);flex-grow: 1;padding: 10px;border: 2px solid black;border-radius: 10px;text-align: center;">
             Restricted</div>
     </div>
-    @foreach($Date as $date)
+    @foreach($Days as $date)
     <div style="display: flex; flex-direction: column; width: 100%;" class="date" value="{{$date}}">
         <div style="display: flex; flex-direction: row; ">
             <div style="width: 150px; padding: 10px;background: rgb(57, 57, 255);color: white;font-size: 15px;">
@@ -104,7 +104,7 @@
             style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 12px;">
             20:00</div>
     </div>
-    @foreach($Room as $room)
+    @foreach($Rooms as $room)
     <div>
         <div style="display: flex; flex-direction: row;" id="myTable">
             <div style="width: 150px; padding: 10px;border: 2px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 15px; "
@@ -112,12 +112,24 @@
                 {{$room->room_name}}</div>
             <div style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
             </div>
-            @for ($i = strtotime('08:30') ; $i <= strtotime('20:00') ; $i=$i + 30*60) 
-                <div class="cell" value="{{date('H:i',$i)}}"></div>
-                @endfor
-                <div
-                    style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
-                </div>
+            @for ($i = strtotime('08:30'); $i <= strtotime('20:00'); $i=$i + 30*60)
+            <div class="cell" value="{{date('H:i',$i)}}" style="
+                @php
+                $dateTime = \Carbon\Carbon::parse($date . ' ' . date('H:i', $i));
+                $cellStyle = '';
+                foreach ($Reservations as $reservation) {
+                    if (($dateTime > $reservation->start_time && $dateTime <= $reservation->stop_time) && $room->id == $reservation->room_id) {
+                        $cellStyle = 'background: rgb(66, 135, 255)';
+                        break;
+                    }
+                }
+                echo $cellStyle;
+                @endphp
+            "></div>
+            @endfor
+            <div
+            style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
+            </div>
         </div>
         @endforeach
     </div>
@@ -210,14 +222,5 @@
         dataMouseup = [];
         data = [];
     });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        myFunction();
-    });
-
-    function myFunction() {
-        alert('chat GPT');
-        console.log('เรียกใช้ฟังก์ชัน JavaScript เมื่อหน้าเว็บเปิด');
-    }
 </script>
 @endsection

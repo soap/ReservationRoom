@@ -64,12 +64,12 @@ class RoomController extends Controller
         return redirect()->route('room.index')->with('success', 'Room has been delete successfully.');
     }
 
-    public function reserve(Room $rooms)
+    public function reserve(Room $room)
     {
         $data=new stdClass;
         $data->date = $_REQUEST['date'];
         $data->start_time = $_REQUEST['start_time'];
         $data->stop_time = $_REQUEST['stop_time'];
-        return view('reserve.create', compact('rooms','data'));
+        return view('reserve.create', compact('room','data'));
     }
 }
