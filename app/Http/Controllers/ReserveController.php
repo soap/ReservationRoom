@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Spatie\Period\Period;
 use Spatie\Period\Precision;
 use App\Http\Requests\ValidateReserve;
+use Spatie\Period\Boundaries;
 
 class ReserveController extends Controller
 {
@@ -31,10 +32,10 @@ class ReserveController extends Controller
         //check period from db
         $checkperiod = Reserve::where('room_id',$request->room_id)->get();
         foreach ($checkperiod as $period) {
-            $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR());
-            $b = Period::make($start_str, $stop_str, Precision::HOUR());
+            $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
+            $b = Period::make($start_str, $stop_str, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             if (($a->overlapsWith($b)) == true) {
-                return view('reserve.create')->with('room_id', $request->room_id)->with('time_error', 'The selected time has already been reserved. please try again.');
+                return view('reserve.create')->with('room', $request->room_id)->with('time_error', 'The selected time has already been reserved. please try again.');
             }
         }
 
@@ -62,10 +63,10 @@ class ReserveController extends Controller
         //check period from model
         $checkperiod = Reserve::where('room_id',$request->room_id)->get();
         foreach ($checkperiod as $period) {
-            $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR());
-            $b = Period::make($start_str, $stop_str, Precision::HOUR());
+            $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
+            $b = Period::make($start_str, $stop_str, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             if (($a->overlapsWith($b)) == true) {
-                return view('reserve.create')->with('room_id', $request->room_id)->with('time_error', 'The selected time has already been reserved. please try again.');
+                return view('reserve.create')->with('room', $request->room_id)->with('time_error', 'The selected time has already been reserved. please try again.');
             }
         }
 

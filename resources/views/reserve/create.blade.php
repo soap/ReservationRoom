@@ -36,7 +36,7 @@
                         $formatteddate = \Carbon\Carbon::parse($data->date)->format('Y-m-d');
                         @endphp
                         <strong>{{$formatteddate}}</strong><br>
-                        <input type="date" value="{{$formatteddate}}" name="date" class="form-control" placeholder="date">
+                        <input type="date" value="{{$formatteddate}}" name="date" class="form-control" placeholder="date" max="{{$formatteddate}}" min="{{$formatteddate}}">
                         @error('date')
                         <div class="alert alert-danger">{{$message}}</div>
                         @enderror
