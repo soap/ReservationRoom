@@ -33,10 +33,10 @@
                     <div class="from-group">
                         <strong>Date</strong>
                         @php
-                        $formatteddate = \Carbon\Carbon::parse($data->date)->format('m-d-Y');
+                        $formatteddate = \Carbon\Carbon::parse($data->date)->format('Y-m-d');
                         @endphp
                         <strong>{{$formatteddate}}</strong><br>
-                        <input type="date" name="date" class="form-control" value="{{$formatteddate}}" placeholder="date">
+                        <input type="date" value="{{$formatteddate}}" name="date" class="form-control" placeholder="date">
                         @error('date')
                         <div class="alert alert-danger">{{$message}}</div>
                         @enderror
