@@ -12,5 +12,9 @@ class Reserve extends Model
     public function room(){
         return $this->belongsTo('App\Models\Room');
     }
+
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
 }
 

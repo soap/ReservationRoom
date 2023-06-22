@@ -108,7 +108,7 @@
     <div>
         <div style="display: flex; flex-direction: row;" id="myTable">
             <div style="width: 150px; padding: 10px;border: 2px solid rgb(57, 57, 255);background: rgb(224, 224, 255);font-size: 15px; "
-                value="{{$room->id}}" class="room">
+                value="{{$room->id}}" class="room" data-bs-toggle="modal" data-bs-target="#myModal{{$room->id}}">
                 {{$room->room_name}}</div>
             <div style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
             </div>
@@ -132,6 +132,59 @@
             @endfor
             <div
             style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
+            </div>
+        </div>
+        <div class="modal" id="myModal{{$room->id}}">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{$room->room_name}}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+        
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="https://i.pinimg.com/originals/d1/68/b0/d168b01a4325c37c0d77386c9e21d720.jpg" class="card-img" alt="Image">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-group">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Room Details</h5>
+                                            <p class="card-text">
+                                                Room ID: {{$room->id}}<br>
+                                                Room Name: {{$room->room_name}}<br>
+                                                Room Color: {{$room->color}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Reservation Settings</h5>
+                                            <p class="card-text">
+                                                Min reservation: 30 minutes<br>
+                                                Max reservation: -<br>
+                                                Approval required: No<br>
+                                                Min Notice: 30 minutes<br>
+                                                Max notice: -<br>
+                                                Overlapped day reservation: No<br>
+                                                Max participants: 10
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
         @endforeach
