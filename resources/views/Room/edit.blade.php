@@ -41,6 +41,12 @@
                         <input type="number" name="max_participant" class="form-control" placeholder="Convention Room max participant">
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="from-group">
+                        <strong>Image Convention room</strong>
+                        <input type="file" class="form-control" name="image" @error('image') is-invalid @enderror>
+                    </div>
+                </div>
                 @if ($message=Session::get('error'))
                 <div class="alert alert-danger col-md-12">
                     <p> {{$message}}</p>

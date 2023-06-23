@@ -25,6 +25,7 @@
                 <th>color</th>
                 <th>Name</th>
                 <th>Max participant</th>
+                <th>image</th>
                 <th width="280px">Action</th>
             </tr>
             @foreach($Room as $room)
@@ -32,6 +33,13 @@
                 <td style="background-color: {{$room->color}}"></td>
                 <td>{{$room->room_name}}</td>
                 <td>{{$room->max_participant}}</td>
+                <td>
+                    @if($room->image)
+                    <img src="{{ asset('storage/images/'.$room->image) }}" style="height: 50px;width:100px;">
+                    @else 
+                    <span>No image found!</span>
+                    @endif
+                </td>
                 <td>
                     <form action="{{route('room.destroy', $room->id)}}" method="post">
                         <a href="{{ route('timeslots') }}" class="btn btn-info">RESERVE</a>

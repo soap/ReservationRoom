@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('room_name');
             $table->string('color');
             $table->integer('max_participant');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

@@ -104,12 +104,15 @@
                 $dateTime = \Carbon\Carbon::parse($date . ' ' . date('H:i', $i));
                 $cellStyle = '';
                 $now = date('Y-m-d H:i',strtotime('+7 hours'));
+                if($dateTime < $now) {
+                    $cellStyle = 'background: rgb(118, 118, 118)';
+                }
                 $userId = Auth::id();
                 $username = Auth::user()->name;
                 foreach ($Reservations as $reservation) {
                     $array_participant = explode(',',$reservation->participant);
                     if($dateTime < $now) {
-                        $cellStyle = 'background: rgb(118, 118, 118)';
+                        break;
                     }elseif (($dateTime > $reservation->start_time && $dateTime <= $reservation->stop_time) && $room->id == $reservation->room_id && $username==$reservation->name) {
                         $cellStyle = 'background: rgb(0, 215, 133)';
                         break;
@@ -142,8 +145,11 @@
                 <div class="modal-body">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img src="https://i.pinimg.com/originals/d1/68/b0/d168b01a4325c37c0d77386c9e21d720.jpg"
-                                class="card-img" alt="Image">
+                            @if($room->image)
+                            <img src="{{ asset('storage/images/'.$room->image) }}" class="card-img" alt="Image">
+                            @else
+                            <span>No image found!</span>
+                            @endif
                         </div>
                         <div class="col-md-8">
                             <div class="card-group">
