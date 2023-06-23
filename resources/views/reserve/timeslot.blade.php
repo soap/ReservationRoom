@@ -28,8 +28,8 @@
     }
 </style>
 
-<div class="container">
-    <input type="date" id="datepicker" onchange="handleDateChange()" />
+<div class="container mb-3">
+    <input type="date" id="datepicker" onchange="handleDateChange()" min="@php echo date('Y-m-d'); @endphp" />
 </div>
 
 <script>

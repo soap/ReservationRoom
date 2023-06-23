@@ -42,7 +42,7 @@ class RoomController extends Controller
         $room->color = $request->color;
         $room->max_participant = $request->max_participant;
         $room->save();
-        return redirect()->route('room.index')->with('success', 'Reserve has been created successfully.');
+        return redirect()->route('room.index')->with('success', 'Room has been created successfully.');
     }
 
     public function edit(Room $room)
