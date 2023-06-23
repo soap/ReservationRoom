@@ -80,7 +80,7 @@
             My Reservation</div>
         <div
             style="background:rgb(189, 35, 255);flex-grow: 1;padding: 10px;margin-right: 2%;color: white;border: 2px solid black;border-radius: 10px;text-align: center;">
-            Particapant</div>
+            Participant</div>
         <div
             style="background:rgb(255, 174, 0);flex-grow: 1;padding: 10px;margin-right: 2%;color: white;border: 2px solid black;border-radius: 10px;text-align: center;">
             Pending</div>
@@ -123,9 +123,18 @@
                 $dateTime = \Carbon\Carbon::parse($date . ' ' . date('H:i', $i));
                 $cellStyle = '';
                 $now = date('Y-m-d H:i',strtotime('+7 hours'));
+                $userId = Auth::id();
+                $username = Auth::user()->name;
                 foreach ($Reservations as $reservation) {
+                    $array_participant = explode(',',$reservation->participant);
                     if($dateTime < $now) {
                         $cellStyle = 'background: rgb(118, 118, 118)';
+                    }elseif (($dateTime > $reservation->start_time && $dateTime <= $reservation->stop_time) && $room->id == $reservation->room_id && $username==$reservation->name) {
+                        $cellStyle = 'background: rgb(0, 215, 133)';
+                        break;
+                    }elseif (($dateTime > $reservation->start_time && $dateTime <= $reservation->stop_time) && $room->id == $reservation->room_id && in_array($userId, $array_participant)) {
+                        $cellStyle = 'background: rgb(189, 35, 255)';
+                        break;
                     }elseif (($dateTime > $reservation->start_time && $dateTime <= $reservation->stop_time) && $room->id == $reservation->room_id) {
                         $cellStyle = 'background: rgb(66, 135, 255)';
                         break;
@@ -177,7 +186,7 @@
                                             Min Notice: 30 minutes<br>
                                             Max notice: -<br>
                                             Overlapped day reservation: No<br>
-                                            Max participants: 10
+                                            Max participants: {{$room->max_participant}}
                                         </p>
                                     </div>
                                 </div>
