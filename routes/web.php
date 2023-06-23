@@ -17,11 +17,13 @@ use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 |
 */
 
-Route::resource('reserve',ReserveController::class);
-Route::resource('room',RoomController::class);
-Route::get('/room/{room}/reserve',[RoomController::class,"reserve"])->name('room.reserve');
-Route::get('/getdatacalendar',[RoomController::class,"getCalendaEvents"])->name('room.calendar');
-Route::get('/reserve_timeslot/{date?}',[ReserveController::class,"indextimeslot"])->name('timeslots');
+Route::middleware(['auth'])->group(function () {
+    Route::resource('reserve', ReserveController::class);
+    Route::resource('room', RoomController::class);
+    Route::get('/room/{room}/reserve', [RoomController::class, "reserve"])->name('room.reserve');
+    Route::get('/getdatacalendar', [RoomController::class, "getCalendaEvents"])->name('room.calendar');
+    Route::get('/reserve_timeslot/{date?}', [ReserveController::class, "indextimeslot"])->name('timeslots');
+});
 
 Route::get('/', function () {
     return view('welcome');

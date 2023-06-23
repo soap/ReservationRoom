@@ -5,12 +5,9 @@
 <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js">
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js">
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js">
-</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
 <style>
@@ -32,31 +29,15 @@
 </style>
 
 <div class="container">
-    <div class="datepicker date 
-                input-group p-0 shadow-sm">
-        <input id="reservationDate" type="text" placeholder="Choose a date" class="form-control py-4 px-4" />
-        <div class="input-group-append">
-            <span class="input-group-text px-4">
-                <i class="fa fa-clock-o"></i>
-            </span>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <p id="showdate"> No Date is Picked </p>
+    <input type="date" id="datepicker" onchange="handleDateChange()" />
 </div>
 
 <script>
-
-    $(".datepicker").datepicker({
-        clearBtn: true,
-        format: "dd/mm/yyyy",
-    });
-    $(".datepicker").on("change", function () {
-        let pickedDate = $("input").val();
-        $("#showdate").text(`You picked this ${pickedDate} Date`);
-        window.location.assign(route('timeslots', moment(pickedDate, 'DD/MM/YYYY').format('YYYY-MM-DD')));
-    });
+    function handleDateChange() {
+        var datepicker = document.getElementById("datepicker");
+        var selectedDate = datepicker.value;
+        window.location.assign(route('timeslots', selectedDate));
+    }
 </script>
 
 <div class="container">
