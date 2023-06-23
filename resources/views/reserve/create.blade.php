@@ -10,7 +10,7 @@
             <h2>Convention Rreserve</h2>
         </div>
         <div>
-            <a href="{{route('reserve.index')}}" class="btn btn-primary">Back</a>
+            <a href="{{route('timeslots')}}" class="btn btn-primary">Back</a>
         </div>
         <form action="{{route('reserve.store')}}" method="POST" enctype="multipart/form-data">
             @csrf
