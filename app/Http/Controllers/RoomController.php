@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\Reserve;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\ValidateRoom;
 use stdClass;
@@ -38,7 +39,8 @@ class RoomController extends Controller
 
         $room = new Room;
         $room->room_name = $request->name;
-        $room->color= $request->color;
+        $room->color = $request->color;
+        $room->max_participant = $request->max_participant;
         $room->save();
         return redirect()->route('room.index')->with('success', 'Reserve has been created successfully.');
     }
@@ -54,6 +56,7 @@ class RoomController extends Controller
         $room = Room::find($id);
         $room->room_name = $request->name;
         $room->color= $request->color;
+        $room->max_participant = $request->max_participant;
         $room->save();
         return redirect()->route('room.index')->with('success', 'Room has been update successfully.');
     }
@@ -66,10 +69,11 @@ class RoomController extends Controller
 
     public function reserve(Room $room)
     {
+        $employees = User::orderBy('id', 'asc')->get();
         $data=new stdClass;
         $data->date = $_REQUEST['date'];
         $data->start_time = $_REQUEST['start_time'];
         $data->stop_time = $_REQUEST['stop_time'];
-        return view('reserve.create', compact('room','data'));
+        return view('reserve.create', compact('room','data','employees'));
     }
 }

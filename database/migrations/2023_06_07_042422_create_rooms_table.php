@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('room_name');
             $table->string('color');
+            $table->integer('max_participant');
             $table->timestamps();
         });
     }

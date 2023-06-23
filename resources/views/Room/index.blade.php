@@ -24,15 +24,17 @@
             <tr>
                 <th>color</th>
                 <th>Name</th>
+                <th>Max participant</th>
                 <th width="280px">Action</th>
             </tr>
             @foreach($Room as $room)
             <tr>
                 <td style="background-color: {{$room->color}}"></td>
                 <td>{{$room->room_name}}</td>
+                <td>{{$room->max_participant}}</td>
                 <td>
                     <form action="{{route('room.destroy', $room->id)}}" method="post">
-                        <a href="{{ route('room.reserve', $room->id) }}" class="btn btn-info">RESERVE</a>
+                        <a href="{{ route('timeslots') }}" class="btn btn-info">RESERVE</a>
                         <a href="{{ route('room.edit', $room->id) }}" class="btn btn-warning">EDIT</a>
                         @csrf
                         @method('DELETE')

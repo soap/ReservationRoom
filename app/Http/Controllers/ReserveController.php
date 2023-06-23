@@ -28,14 +28,15 @@ class ReserveController extends Controller
     {
         $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
         $stop_str = Carbon::parse("{$request->date} {$request->stop_time}")->format('Y-m-d H:i:s');
-        // dd($request->date,$start_str,$stop_str);
+        $particapant = $request->input('particapant');
+        $participant_str = join(',',$particapant);
         //check period from db
         $checkperiod = Reserve::where('room_id',$request->room_id)->get();
         foreach ($checkperiod as $period) {
             $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             $b = Period::make($start_str, $stop_str, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             if (($a->overlapsWith($b)) == true) {
-                return view('reserve.create')->with('room', $request->room_id)->with('time_error', 'The selected time has already been reserved. please try again.');
+                return redirect()->route('timeslots')->with('time_error', 'The selected time has already been reserved. please try again.');
             }
         }
 
@@ -45,6 +46,7 @@ class ReserveController extends Controller
         $reserve->room_id = $request->room_id;
         $reserve->start_time = $start_str;
         $reserve->stop_time = $stop_str;
+        $reserve->participant = $participant_str;
         $reserve->save();
         return redirect()->route('room.index')->with('success', 'Reserve has been created successfully.');
     }
@@ -63,10 +65,10 @@ class ReserveController extends Controller
         //check period from model
         $checkperiod = Reserve::where('room_id',$request->room_id)->get();
         foreach ($checkperiod as $period) {
-            $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
-            $b = Period::make($start_str, $stop_str, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
+            $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR());
+            $b = Period::make($start_str, $stop_str, Precision::HOUR());
             if (($a->overlapsWith($b)) == true) {
-                return view('reserve.create')->with('room', $request->room_id)->with('time_error', 'The selected time has already been reserved. please try again.');
+                return redirect()->route('timeslots')->with('time_error', 'The selected time has already been reserved. please try again.');
             }
         }
 

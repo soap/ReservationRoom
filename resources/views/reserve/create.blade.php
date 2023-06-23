@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<!-- Select2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css">
 <div class="container mt-2">
     <div class="row">
         <div class="col-lg-12">
@@ -36,7 +39,8 @@
                         $formatteddate = \Carbon\Carbon::parse($data->date)->format('Y-m-d');
                         @endphp
                         <strong>{{$formatteddate}}</strong><br>
-                        <input type="date" value="{{$formatteddate}}" name="date" class="form-control" placeholder="date" max="{{$formatteddate}}" min="{{$formatteddate}}">
+                        <input type="date" value="{{$formatteddate}}" name="date" class="form-control"
+                            placeholder="date" max="{{$formatteddate}}" min="{{$formatteddate}}">
                         @error('date')
                         <div class="alert alert-danger">{{$message}}</div>
                         @enderror
@@ -104,6 +108,16 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <strong>Particapant</strong>
+                        <select id="employeeSelect" class="form-control" name="particapant[]" multiple>
+                            @foreach($employees as $employee)
+                            <option value="{{$employee->id}}">{{$employee->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 @if ($message=Session::get('time_error'))
                 <div class="alert alert-danger">
                     <p> {{$message}}</p>
@@ -124,4 +138,17 @@
         </form>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#employeeSelect').select2({
+            placeholder: 'Search employees',
+            width: '100%'
+        });
+    });
+</script>
 @endsection

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->dateTime('start_time');
             $table->dateTime('stop_time');
+            $table->string('participant');
             $table->timestamps();
         });
     }

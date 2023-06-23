@@ -37,7 +37,13 @@
                 <div class="col-md-12">
                     <div class="from-group">
                         <strong>Room color</strong>
-                        <input type="color" name="color" class="form-control"placeholder="Convention Room Color">
+                        <input type="color" name="color" class="form-control" placeholder="Convention Room Color">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="from-group">
+                        <strong>Max participant</strong>
+                        <input type="number" name="max_participant" class="form-control" placeholder="Convention Room max participant">
                     </div>
                 </div>
                 @if ($message=Session::get('error'))

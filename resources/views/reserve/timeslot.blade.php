@@ -60,6 +60,11 @@
 </script>
 
 <div class="container">
+    @if ($message=Session::get('time_error'))
+    <div class="alert alert-danger">
+        <p> {{$message}}</p>
+    </div>
+    @endif
     <div style="display: flex; flex-direction: row; width: 100%;margin-bottom: 10px;" class="table table-bordered">
         <div
             style="background:white;flex-grow: 1;padding: 10px;margin-right: 2%;border: 2px solid black;border-radius: 10px;text-align: center;">
