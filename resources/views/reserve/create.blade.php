@@ -18,8 +18,8 @@
                 <div class="col-md-12">
                     <div class="from-group">
                         <strong>Reserve Name</strong>
-                        <input type="text" name="name" value="{{ old('name') }}" class="form-control"
-                            placeholder="Convention Room Name">
+                        <input type="text" name="name" value="{{Auth::user()->name}}" class="form-control"
+                            placeholder="Reserve Name">
 
                         @error('name')
                         <div class="alert alert-danger">{{$message}}</div>
