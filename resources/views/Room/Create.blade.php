@@ -27,8 +27,6 @@
                         <strong>Reserve Name</strong>
                         <input type="text" name="name" value="{{ old('name') }}" class="form-control"
                             placeholder="Convention Room Name">
-
-
                         @error('name')
                         <div class="alert alert-danger">{{$message}}</div>
                         @enderror
@@ -38,6 +36,9 @@
                     <div class="from-group">
                         <strong>Room color</strong>
                         <input type="color" name="color" class="form-control" placeholder="Convention Room Color">
+                        @error('color')
+                        <div class="alert alert-danger">{{$message}}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -45,12 +46,18 @@
                         <strong>Max participant</strong>
                         <input type="number" name="max_participant" class="form-control"
                             placeholder="Convention Room max participant">
+                        @error('max_participant')
+                        <div class="alert alert-danger">{{$message}}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="from-group">
                         <strong>Image Convention room</strong>
                         <input type="file" class="form-control" name="image" @error('image') is-invalid @enderror>
+                        @error('image')
+                    <div class="alert alert-danger">{{$message}}</div>
+                    @enderror
                     </div>
                 </div>
                 @if ($message=Session::get('error'))
