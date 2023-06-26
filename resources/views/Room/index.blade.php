@@ -6,8 +6,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
 
+<!-- Add the necessary CSS styles for tooltips -->
+<style>
+    .tooltip {
+        position: absolute;
+        z-index: 100;
+        display: block;
+        font-size: 14px;
+        font-weight: normal;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+</style>
 
-<div class="container" mt-2>
+<div class="container mt-2">
     <div class="row">
         <div class="col-lg-12 text-center">
             <h2>Room</h2>
@@ -17,7 +29,7 @@
         </div>
         @if ($message=Session::get('success'))
         <div class="alert alert-success">
-            <p> {{$message}}</p>
+            <p>{{$message}}</p>
         </div>
         @endif
         <table class="table table-bordered">
@@ -54,11 +66,14 @@
         </table>
         {!!$Room->links('pagination::bootstrap-5')!!}
     </div>
-    <div id='calendar'></div>
+    <div id="calendar"></div>
 </div>
+
+<!-- Include the Bootstrap tooltip library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
 <script>
     $(document).ready(function () {
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -66,8 +81,15 @@
         });
 
         var calendar = $('#calendar').fullCalendar({
-            eventClick: function (eventObj) {
-                alert('Participant has ' + eventObj.participant);
+            eventRender: function (event, element) {
+                element.attr('title', 'Participant: ' + event.participant);
+                element.tooltip({
+                    container: 'body',
+                    delay: {
+                        show: 500,
+                        hide: 0
+                    }
+                });
             },
             header: {
                 left: 'prev,next today',

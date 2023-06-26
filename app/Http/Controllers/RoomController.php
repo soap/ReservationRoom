@@ -31,8 +31,8 @@ class RoomController extends Controller
                 $participant = User::where('id', $participantID)->first();
                 array_push($participantNameArray,$participant->name);
             }
-            $strParticipantName = implode(",",$participantNameArray);
-            $arr_event = ['title' => $event->name.' '.date("H:i", strtotime($event->start_time)).'-'.date("H:i", strtotime($event->stop_time)).' '.$event->participant, 'start' => $event->start_time, 'end' => $event->stop_time, 'color' => $event->room->color, 'participant' => $strParticipantName];
+            $strParticipantName = implode(", ",$participantNameArray);
+            $arr_event = ['title' => $event->name.' '.date("H:i", strtotime($event->start_time)).'-'.date("H:i", strtotime($event->stop_time)), 'start' => $event->start_time, 'end' => $event->stop_time, 'color' => $event->room->color, 'participant' => $strParticipantName];
             array_push($json_event,$arr_event);
         }
         return json_encode($json_event);
