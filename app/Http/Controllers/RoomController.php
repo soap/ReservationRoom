@@ -22,8 +22,17 @@ class RoomController extends Controller
     {
         $events = Reserve::orderBy('start_time', 'asc')->get();
         $json_event=[];
+        //loop data orderby asc with start_time in Reserve
         foreach ($events as $event) {
-            $arr_event = ['title' => $event->name.' '.date("H:i", strtotime($event->start_time)).'-'.date("H:i", strtotime($event->stop_time)), 'start' => $event->start_time, 'end' => $event->stop_time, 'color' => $event->room->color];
+            $participantIDArray = explode(",",$event->participant);
+            $participantNameArray = [];
+            //loop data from id in event->participant
+            foreach ($participantIDArray as $participantID){
+                $participant = User::where('id', $participantID)->first();
+                array_push($participantNameArray,$participant->name);
+            }
+            $strParticipantName = implode(",",$participantNameArray);
+            $arr_event = ['title' => $event->name.' '.date("H:i", strtotime($event->start_time)).'-'.date("H:i", strtotime($event->stop_time)).' '.$event->participant, 'start' => $event->start_time, 'end' => $event->stop_time, 'color' => $event->room->color, 'participant' => $strParticipantName];
             array_push($json_event,$arr_event);
         }
         return json_encode($json_event);

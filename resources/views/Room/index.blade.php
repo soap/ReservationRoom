@@ -36,7 +36,7 @@
                 <td>
                     @if($room->image)
                     <img src="{{ asset('storage/images/'.$room->image) }}" style="height: 50px;width:100px;">
-                    @else 
+                    @else
                     <span>No image found!</span>
                     @endif
                 </td>
@@ -66,6 +66,9 @@
         });
 
         var calendar = $('#calendar').fullCalendar({
+            eventClick: function (eventObj) {
+                alert('Participant has ' + eventObj.participant);
+            },
             header: {
                 left: 'prev,next today',
                 center: 'title',
