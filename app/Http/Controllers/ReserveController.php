@@ -36,7 +36,7 @@ class ReserveController extends Controller
         }
         $participant_str = join(',', $particapant);
         //check period from db
-        $checkperiod = Reserve::where('room_id', $request->room_id)->get();
+        $checkperiod = Reserve::where('room_id', $request->room_id)->where('permission_status', '!=' , 2)->get();
         foreach ($checkperiod as $period) {
             $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             $b = Period::make($start_str, $stop_str, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
@@ -79,7 +79,7 @@ class ReserveController extends Controller
         }
         $participant_str = join(',', $particapant);
         //check period from db
-        $checkperiod = Reserve::where('room_id', $request->room_id)->get();
+        $checkperiod = Reserve::where('room_id', $request->room_id)->where('permission_status', '!=' , 2)->get();
         foreach ($checkperiod as $period) {
             $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             $b = Period::make($start_str, $stop_str, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
@@ -126,15 +126,15 @@ class ReserveController extends Controller
         }
         $start_time = $date->format('Y-m-d H:i:s');
         $stop_time = date('Y-m-d', strtotime($start_time . ' +6 day'));
-        $Reservations = Reserve::where('start_time', '>=', $start_time)->where('stop_time', '<=', $stop_time)->get();
+        $Reservations = Reserve::where('start_time', '>=', $start_time)->where('stop_time', '<=', $stop_time)->where('permission_status', '!=' , 2)->get();
         $Days = $tempdate;
         $Rooms = Room::orderBy('id', 'asc')->get();
 
         return view('reserve.timeslot', compact('Reservations', 'Days', 'Rooms'));
     }
 
-    public function changePermissionStatus(Reserve $reserve){
-        Reserve::find($reserve->id)->update(['permission_status' => 0]);
+    public function changePermissionStatus(Request $request){
+        Reserve::find($request->id)->update(['permission_status' => $request->status]);
         return redirect()->route('reserve.index')->with('success', 'Reserve has been update successfully.');
     }
 }

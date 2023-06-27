@@ -34,17 +34,12 @@
                 <td>{{$reserve->stop_time}}</td>
                 <td>{{$reserve->participant}}</td>
                 <td>
-                    <div class="form-check form-switch">
-                        @if($reserve->permission_status == 1)
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            checked>
-                        @elseif($reserve->permission_status == 0)
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            disabled>
-                        @endif
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox
-                            input</label>
-                    </div>
+                    <select class="form-select" id="permission_status" name="permission_status">
+                        <option value=0 @selected($reserve->permission_status == 0)>Approval</option>
+                        <option value=1 @selected($reserve->permission_status == 1)>Pending</option>
+                        <option value=2 @selected($reserve->permission_status == 2)>Cancel</option>
+                    </select>
+                    <button class="btn btn-primary mt-2" onclick="handleButtonClick()">Change Status</button>
                 </td>
                 <td>
                     <form action="{{route('reserve.destroy', $reserve->id)}}" method="post">
@@ -60,18 +55,16 @@
         {!!$Reservation->links('pagination::bootstrap-5')!!}
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#flexSwitchCheckChecked').on('change', function () {
-            if ($(this).is(':not(:checked)')) {
-                if (confirm("Press a button!") == true) {
-                    window.location.href = '{{ route("updateReserveStatus", $reserve->id) }}';
-                } else {
-                    window.location.href = '{{ route("reserve.index") }}';
-                }
-            }
-        });
-    });
+    function handleButtonClick() {
+        var selectedValue = document.getElementById("permission_status").value;
+        if (selectedValue == 2) {
+            window.location.href = '{{ route("updateReserveStatus", ["id" => $reserve->id, "status" => "__status__"]) }}'.replace('__status__', selectedValue);
+        } else if (selectedValue == 1) {
+            window.location.href = '{{ route("reserve.index") }}';
+        } else {
+            window.location.href = '{{ route("updateReserveStatus", ["id" => $reserve->id, "status" => "__status__"]) }}'.replace('__status__', selectedValue);
+        }
+    }
 </script>
 @endsection

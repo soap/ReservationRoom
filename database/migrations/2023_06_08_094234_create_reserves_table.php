@@ -21,7 +21,7 @@ return new class extends Migration
             $table->dateTime('start_time');
             $table->dateTime('stop_time');
             $table->string('participant');
-            $table->boolean('permission_status');
+            $table->integer('permission_status');
             $table->timestamps();
         });
     }
