@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Reserve extends Model
 {
     use HasFactory;
+    protected $table = 'reserves';
+    protected $fillable = ['permission_status'];
 
     public function room(){
         return $this->belongsTo('App\Models\Room');

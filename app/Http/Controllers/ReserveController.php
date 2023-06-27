@@ -132,4 +132,9 @@ class ReserveController extends Controller
 
         return view('reserve.timeslot', compact('Reservations', 'Days', 'Rooms'));
     }
+
+    public function changePermissionStatus(Reserve $reserve){
+        Reserve::find($reserve->id)->update(['permission_status' => 0]);
+        return redirect()->route('reserve.index')->with('success', 'Reserve has been update successfully.');
+    }
 }
