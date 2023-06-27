@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('color');
             $table->integer('max_participant');
             $table->string('image')->nullable();
+            $table->boolean('admin_permission')->default(false);
             $table->timestamps();
         });
     }

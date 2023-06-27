@@ -31,18 +31,23 @@ class ReserveController extends Controller
         $particapant = $request->input('particapant');
         $room = Room::find($request->room_id);
         // dd($room->max_participant);
-        if(sizeof($particapant) > $room->max_participant){
+        if (sizeof($particapant) > $room->max_participant) {
             return redirect()->route('timeslots')->with('time_error', 'Too many participant for a convention room. please choose another convention room.');
         }
-        $participant_str = join(',',$particapant);
+        $participant_str = join(',', $particapant);
         //check period from db
-        $checkperiod = Reserve::where('room_id',$request->room_id)->get();
+        $checkperiod = Reserve::where('room_id', $request->room_id)->get();
         foreach ($checkperiod as $period) {
             $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             $b = Period::make($start_str, $stop_str, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             if (($a->overlapsWith($b)) == true) {
                 return redirect()->route('timeslots')->with('time_error', 'The selected time has already been reserved. please try again.');
             }
+        }
+        //default status
+        $permission_status = 0;
+        if ($room->admin_permission == 1) {
+            $permission_status = 1;
         }
 
         //create data
@@ -52,6 +57,7 @@ class ReserveController extends Controller
         $reserve->start_time = $start_str;
         $reserve->stop_time = $stop_str;
         $reserve->participant = $participant_str;
+        $reserve->permission_status = $permission_status;
         $reserve->save();
         return redirect()->route('room.index')->with('success', 'Reserve has been created successfully.');
     }
@@ -63,25 +69,37 @@ class ReserveController extends Controller
 
     public function update(ValidateReserve $request, $id)
     {
-
         $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
         $stop_str = Carbon::parse("{$request->date} {$request->stop_time}")->format('Y-m-d H:i:s');
-
-        //check period from model
-        $checkperiod = Reserve::where('room_id',$request->room_id)->get();
+        $particapant = $request->input('particapant');
+        $room = Room::find($request->room_id);
+        // dd($room->max_participant);
+        if (sizeof($particapant) > $room->max_participant) {
+            return redirect()->route('timeslots')->with('time_error', 'Too many participant for a convention room. please choose another convention room.');
+        }
+        $participant_str = join(',', $particapant);
+        //check period from db
+        $checkperiod = Reserve::where('room_id', $request->room_id)->get();
         foreach ($checkperiod as $period) {
-            $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR());
-            $b = Period::make($start_str, $stop_str, Precision::HOUR());
+            $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
+            $b = Period::make($start_str, $stop_str, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             if (($a->overlapsWith($b)) == true) {
                 return redirect()->route('timeslots')->with('time_error', 'The selected time has already been reserved. please try again.');
             }
+        }
+        //default status
+        $permission_status = 0;
+        if ($room->admin_permission == 1) {
+            $permission_status = 1;
         }
 
         $reserve = Reserve::find($id);
         $reserve->name = $request->name;
         $reserve->room_id = $request->room_id;
-        $reserve->start_time =  $start_str;
+        $reserve->start_time = $start_str;
         $reserve->stop_time = $stop_str;
+        $reserve->participant = $participant_str;
+        $reserve->permission_status = $permission_status;
         $reserve->save();
         return redirect()->route('reserve.index')->with('success', 'Reserve has been update successfully.');
     }
@@ -92,25 +110,26 @@ class ReserveController extends Controller
         return redirect()->route('reserve.index')->with('success', 'Reserve has been delete successfully.');
     }
 
-    public function indextimeslot(Request $request, $date=null){
-        if(is_null($date)){
+    public function indextimeslot(Request $request, $date = null)
+    {
+        if (is_null($date)) {
             $date = Carbon::now();
-        }else{
+        } else {
             $date = Carbon::parse($date);
         }
-            $start = $date->startOfWeek(Carbon::MONDAY);
-            $weekStartDate = $start->startOfWeek()->format('Y-m-d H:i');
-        $tempdate=[];
-        for($i=0;$i<5;$i++){
+        $start = $date->startOfWeek(Carbon::MONDAY);
+        $weekStartDate = $start->startOfWeek()->format('Y-m-d H:i');
+        $tempdate = [];
+        for ($i = 0; $i < 5; $i++) {
             $days_ago = gmdate("d-m-Y", strtotime("+$i days", strtotime($weekStartDate)));
-            array_push($tempdate,$days_ago);
+            array_push($tempdate, $days_ago);
         }
         $start_time = $date->format('Y-m-d H:i:s');
-        $stop_time = date('Y-m-d', strtotime($start_time .' +6 day'));
-        $Reservations = Reserve::where('start_time' ,'>=', $start_time )->where('stop_time' ,'<=' , $stop_time)->get();
+        $stop_time = date('Y-m-d', strtotime($start_time . ' +6 day'));
+        $Reservations = Reserve::where('start_time', '>=', $start_time)->where('stop_time', '<=', $stop_time)->get();
         $Days = $tempdate;
         $Rooms = Room::orderBy('id', 'asc')->get();
 
-        return view('reserve.timeslot', compact('Reservations','Days','Rooms'));
+        return view('reserve.timeslot', compact('Reservations', 'Days', 'Rooms'));
     }
 }

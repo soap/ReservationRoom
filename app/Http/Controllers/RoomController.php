@@ -28,7 +28,7 @@ class RoomController extends Controller
             $participantNameArray = [];
             //loop data from id in event->participant
             foreach ($participantIDArray as $participantID){
-                $participant = User::where('id', $participantID)->first();
+                $participant = User::find($participantID);
                 array_push($participantNameArray,$participant->name);
             }
             $strParticipantName = implode(", ",$participantNameArray);
@@ -53,6 +53,7 @@ class RoomController extends Controller
         $room->color = $request->color;
         $room->max_participant = $request->max_participant;
         $room->image = $fileName;
+        $room->admin_permission = $request->admin_permission == 'on' ? 1 : 0;
         $room->save();
         return redirect()->route('room.index')->with('success', 'Room has been created successfully.');
     }
@@ -72,6 +73,7 @@ class RoomController extends Controller
         $room->color= $request->color;
         $room->max_participant = $request->max_participant;
         $room->image = $fileName;
+        $room->admin_permission = $request->admin_permission == 'on' ? 1 : 0;
         $room->save();
         return redirect()->route('room.index')->with('success', 'Room has been update successfully.');
     }

@@ -113,6 +113,9 @@
                     $array_participant = explode(',',$reservation->participant);
                     if($dateTime < $now) {
                         break;
+                    }elseif (($dateTime > $reservation->start_time && $dateTime <= $reservation->stop_time) && $reservation->permission_status == 1) {
+                        $cellStyle = 'background: rgb(255, 174, 0)';
+                        break;
                     }elseif (($dateTime > $reservation->start_time && $dateTime <= $reservation->stop_time) && $room->id == $reservation->room_id && $username==$reservation->name) {
                         $cellStyle = 'background: rgb(0, 215, 133)';
                         break;
