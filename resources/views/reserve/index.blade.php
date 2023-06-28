@@ -17,6 +17,7 @@
         <table class="table table-bordered">
             <tr>
                 <th>No.</th>
+                <th>Title</th>
                 <th>Name</th>
                 <th>room_id</th>
                 <th>Start Time</th>
@@ -28,6 +29,7 @@
             @foreach($Reservation as $reserve)
             <tr>
                 <td>{{$reserve->id}}</td>
+                <td>{{$reserve->title}}</td>
                 <td>{{$reserve->name}}</td>
                 <td>{{$reserve->room_id}}</td>
                 <td>{{$reserve->start_time}}</td>

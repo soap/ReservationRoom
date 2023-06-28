@@ -24,8 +24,8 @@ class ValidateRoom extends FormRequest
     public function rules()
     {
         return [
-            'name'=> 'required|string|unique:rooms,room_name',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'name' => 'required|string|unique:rooms,room_name',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 
@@ -33,7 +33,7 @@ class ValidateRoom extends FormRequest
     {
         return [
             'name.required' => 'This room already exists.',
-            'image.required' => 'Image must by jpeg,png,jpg.gif,svg type'
+            'image.required' => 'Image must by jpeg,png,jpg.gif,svg type',
         ];
     }
 }

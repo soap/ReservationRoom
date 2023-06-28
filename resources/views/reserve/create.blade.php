@@ -17,6 +17,16 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="from-group">
+                        <strong>Reserve Title</strong>
+                        <input type="text" name="title" class="form-control"
+                            placeholder="Reserve Title">
+                        @error('title')
+                        <div class="alert alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="from-group">
                         <strong>Reserve Name</strong>
                         <input type="text" name="name" value="{{Auth::user()->name}}" class="form-control"
                             placeholder="Reserve Name">

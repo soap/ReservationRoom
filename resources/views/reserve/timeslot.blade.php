@@ -24,7 +24,7 @@
     }
 
     .cell.dragging {
-        background-color: yellow;
+        background-color: rgb(255, 255, 0);
     }
 </style>
 
@@ -99,7 +99,7 @@
             <div style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
             </div>
             @for ($i = strtotime('08:30'); $i <= strtotime('20:00'); $i=$i + 30*60) <div class="cell"
-                value="{{date('H:i',$i)}}" style="
+                value="{{date('H:i',$i)}}" data-toggle="tooltip" data-placement="top" style="
                 @php
                 $dateTime = \Carbon\Carbon::parse($date . ' ' . date('H:i', $i));
                 $cellStyle = '';
@@ -129,7 +129,12 @@
                 }
                 echo $cellStyle;
                 @endphp
-            ">
+            "
+            @php
+            if ($cellStyle != '' && $cellStyle != 'background: rgb(118, 118, 118)') {
+                echo 'title="' . $reservation->title . '"';
+            }
+            @endphp >
         </div>
         @endfor
         <div style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
@@ -208,36 +213,38 @@
 
     cells.forEach(cell => {
         cell.addEventListener('mousedown', () => {
-            isDragging = true;
-            cell.classList.add('dragging');
-            selectedCells.push(cell);
-            if (event.target.classList.contains("cell")) {
-                var cellValue = cell.getAttribute("value");
+            if (window.getComputedStyle(cell).getPropertyValue('background-color') === 'rgba(0, 0, 0, 0)') {
+                isDragging = true;
+                cell.classList.add('dragging');
+                selectedCells.push(cell);
+                if (event.target.classList.contains("cell")) {
+                    var cellValue = cell.getAttribute("value");
 
-                //get start time
-                const temptime = cellValue.split(':');
-                function convertToSeconds(temptime) {
-                    return Number(temptime[0]) * 60 * 60 + (Number(temptime[1]) - 30) * 60;
+                    //get start time
+                    const temptime = cellValue.split(':');
+                    function convertToSeconds(temptime) {
+                        return Number(temptime[0]) * 60 * 60 + (Number(temptime[1]) - 30) * 60;
+                    }
+                    console.log(convertToSeconds(temptime));
+                    var date = new Date(null);
+                    date.setSeconds(convertToSeconds(temptime));
+                    var hhmmssFormat = date.toISOString().substr(11, 5);
+                    console.log(hhmmssFormat);
+
+                    var roomValue = cell.parentNode.parentNode.querySelector(".room").getAttribute("value");
+                    var dateValue = cell.closest(".date").getAttribute("value");
+
+                    dataMousedown.room = roomValue;
+                    dataMousedown.date = dateValue;
+                    dataMousedown.start_time = hhmmssFormat;
+
+                    console.log(dataMousedown);
                 }
-                console.log(convertToSeconds(temptime));
-                var date = new Date(null);
-                date.setSeconds(convertToSeconds(temptime));
-                var hhmmssFormat = date.toISOString().substr(11, 5);
-                console.log(hhmmssFormat);
-
-                var roomValue = cell.parentNode.parentNode.querySelector(".room").getAttribute("value");
-                var dateValue = cell.closest(".date").getAttribute("value");
-
-                dataMousedown.room = roomValue;
-                dataMousedown.date = dateValue;
-                dataMousedown.start_time = hhmmssFormat;
-
-                console.log(dataMousedown);
             }
         });
 
         cell.addEventListener('mouseover', () => {
-            if (isDragging && !selectedCells.includes(cell)) {
+            if (isDragging && !selectedCells.includes(cell) && window.getComputedStyle(cell).getPropertyValue('background-color') === 'rgba(0, 0, 0, 0)') {
                 cell.classList.add('dragging');
                 selectedCells.push(cell);
             }
@@ -262,8 +269,8 @@
             console.log(dataMouseup);
         }
         //check same date and room
-        if (((dataMousedown.room != dataMouseup.room) || dataMousedown.date != dataMouseup.date) && isDragging == false) {
-            alert('select same room or date');
+        if (((dataMousedown.room != dataMouseup.room) || dataMousedown.date != dataMouseup.date) && isDragging == false && event.target.classList.contains("cell")) {
+            alert('error your selected room or date');
             return false;
         }
         data.room = dataMousedown.room;
@@ -284,11 +291,14 @@
         data = [];
     });
 
-    cells.forEach(cell => {
-        const cellStyle = window.getComputedStyle(cell);
-        if (cellStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' && cellStyle.backgroundColor !== 'transparent') {
-            cell.style.pointerEvents = 'none';
-        }
-    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    // cells.forEach(cell => {
+    //     const cellStyle = window.getComputedStyle(cell);
+    //     if (cellStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' && cellStyle.backgroundColor !== 'transparent') {
+    //         cell.style.pointerEvents = 'none';
+    //     }
+    // });
 </script>
 @endsection

@@ -9,7 +9,8 @@ class Room extends Model
 {
     use HasFactory;
 
-    public function reserve(){
+    public function reserve()
+    {
         return $this->hasMany('App\Models\Reseve');
     }
 }
