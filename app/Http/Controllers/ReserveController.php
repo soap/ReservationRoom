@@ -15,7 +15,7 @@ class ReserveController extends Controller
 {
     public function index()
     {
-        $data['Reservation'] = Reserve::orderBy('id', 'asc')->paginate(5);
+        $data['Reservation'] = Reserve::orderByRaw("ABS(TIMESTAMPDIFF(SECOND, start_time, NOW()))")->paginate(5);
 
         return view('reserve.index', $data);
     }
