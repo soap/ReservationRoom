@@ -13,12 +13,15 @@ use Spatie\Period\Precision;
 
 class ReserveController extends Controller
 {
-    public function index()
-    {
-        $data['Reservation'] = Reserve::orderByRaw("ABS(TIMESTAMPDIFF(SECOND, start_time, NOW()))")->paginate(5);
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+    $data['Reservation'] = Reserve::where('title', 'LIKE', "%$search%")
+        ->orderByRaw("ABS(TIMESTAMPDIFF(SECOND, start_time, NOW()))")
+        ->paginate(5);
 
-        return view('reserve.index', $data);
-    }
+    return view('reserve.index', $data);
+}
 
     public function create()
     {
