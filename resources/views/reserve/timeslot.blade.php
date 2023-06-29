@@ -1,14 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 
 <style>
     .mytable {
@@ -29,14 +28,59 @@
 </style>
 
 <div class="container mb-3">
-    <input type="date" id="datepicker" onchange="handleDateChange()" min="@php echo date('Y-m-d'); @endphp" />
+    <div class="d-flex justify-content-center">
+        <div class="mr-4" onclick="handlePreviousWeek()">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </div>
+        <span class="glyphicon glyphicon-calendar" id="datepicker-icon"></span>
+        <input type="text" id="datepicker" onchange="handleDateChange()" min="@php echo date('Y-m-d'); @endphp"
+            style="display: none;" />
+        <div class="ml-4" onclick="handleNextWeek()">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </div>
+    </div>
 </div>
 
 <script>
+    $('#datepicker-icon').click(function () {
+        $('#datepicker').datepicker('show');
+    });
+
+    $('#datepicker').datepicker({
+        dateFormat: 'yy-mm-dd',
+        minDate: new Date() // Sets minimum date to today
+    });
+
     function handleDateChange() {
-        var datepicker = document.getElementById("datepicker");
-        var selectedDate = datepicker.value;
+        var selectedDate = $('#datepicker').val();
         window.location.assign(route('timeslots', selectedDate));
+    }
+
+    function handlePreviousWeek() {
+        console.log("test previous is doing");
+        let path = window.location.pathname;
+        let arr_path = path.split("/");
+        if (arr_path.length == 2) {
+            arr_path[2] = new Date();
+        } else {
+            arr_path[2] = new Date(arr_path[2]);
+        }
+        arr_path[2].setDate(arr_path[2].getDate() - 7);
+        arr_path[2] = arr_path[2].toJSON().slice(0, 10);
+        window.location.assign(route('timeslots', arr_path[2]));
+    }
+
+    function handleNextWeek() {
+        let path = window.location.pathname;
+        let arr_path = path.split("/");
+        if (arr_path.length == 2) {
+            arr_path[2] = new Date();
+        } else {
+            arr_path[2] = new Date(arr_path[2]);
+        }
+        arr_path[2].setDate(arr_path[2].getDate() + 7);
+        arr_path[2] = arr_path[2].toJSON().slice(0, 10);
+        window.location.assign(route('timeslots', arr_path[2]));
     }
 </script>
 
@@ -129,12 +173,10 @@
                 }
                 echo $cellStyle;
                 @endphp
-            "
-            @php
-            if ($cellStyle != '' && $cellStyle != 'background: rgb(118, 118, 118)') {
-                echo 'title="' . $reservation->title . '"';
-            }
-            @endphp >
+            " @php if ($cellStyle !='' && $cellStyle !='background: rgb(118, 118, 118)' ) { echo 'title="' .
+                $reservation->title . '"';
+                }
+                @endphp >
         </div>
         @endfor
         <div style="width: 50px; padding: 10px;border: 1px solid rgb(57, 57, 255);background: rgb(234, 82, 82);">
@@ -257,6 +299,15 @@
         cells.forEach(cell => {
             cell.classList.remove('dragging');
         });
+        //check mouse up in cell
+        if (!event.target.classList.contains("cell")) {
+            return false;
+        }
+        //check mouse up is no status
+        const cellBackground = window.getComputedStyle(event.target).getPropertyValue('background-color');
+        if (cellBackground !== 'rgba(0, 0, 0, 0)') {
+            return false;
+        }
         if (event.target.classList.contains("cell")) {
             var stop_time = event.target.getAttribute("value");
             var roomValue = event.target.parentNode.parentNode.querySelector(".room").getAttribute("value");
@@ -269,7 +320,7 @@
             console.log(dataMouseup);
         }
         //check same date and room
-        if (((dataMousedown.room != dataMouseup.room) || dataMousedown.date != dataMouseup.date) && isDragging == false && event.target.classList.contains("cell")) {
+        if (((dataMousedown.room != dataMouseup.room) || dataMousedown.date != dataMouseup.date) && isDragging == false) {
             alert('error your selected room or date');
             return false;
         }
@@ -278,6 +329,11 @@
         data.start_time = dataMousedown.start_time;
         data.stop_time = dataMouseup.stop_time;
         console.log(data);
+        //check start before stop
+        if (data.start_time >= data.stop_time) {
+            alert('you can select start time before stop time');
+            return false;
+        }
         window.location.assign(route("room.reserve", {
             room: data.room, _query: {
                 date: data.date,
@@ -294,11 +350,11 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
-    // cells.forEach(cell => {
-    //     const cellStyle = window.getComputedStyle(cell);
-    //     if (cellStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' && cellStyle.backgroundColor !== 'transparent') {
-    //         cell.style.pointerEvents = 'none';
-    //     }
-    // });
+    cells.forEach(cell => {
+        const cellStyle = window.getComputedStyle(cell);
+        if (cellStyle.backgroundColor == 'rgb(118, 118, 118)') {
+            cell.style.pointerEvents = 'none';
+        }
+    });
 </script>
 @endsection
