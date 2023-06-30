@@ -7,9 +7,9 @@
     integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
     crossorigin="anonymous"></script>
 
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <style>
     .mytable {
@@ -29,16 +29,23 @@
     }
 </style>
 
+<?php
+$firstDate = reset($Days);
+$lastDate = end($Days);
+?>
+<script>
+    $(function () {
+      $("#datepicker").datepicker({
+        dateFormat: 'yy-mm-dd',
+        minDate: new Date()
+      });
+    });
+  </script>
 <div class="container mb-3">
     <div class="d-flex justify-content-center">
-        <div class="mr-4" onclick="handlePreviousWeek()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-chevron-left" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
-            </svg>
-        </div>
-        <div class="w-20">
+        <h2>Reserve Convention Rooms</h2>
+        <div class="mx-3">
+            <input type="text" id="datepicker" onchange="handleDateChange()" style="display: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3"
                 viewBox="0 0 16 16" id="datepicker-icon">
                 <path
@@ -47,8 +54,18 @@
                     d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
             </svg>
         </div>
-        <input type="text" id="datepicker" onchange="handleDateChange()" min="@php echo date('Y-m-d'); @endphp"
-            style="display: none;" />
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="mr-4" onclick="handlePreviousWeek()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-chevron-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+        </div>
+        <h4>
+            <pre>  {{$firstDate}} - {{$lastDate}}  </pre>
+        </h4>
         <div class="ml-4" onclick="handleNextWeek()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-chevron-right" viewBox="0 0 16 16">
@@ -61,12 +78,7 @@
 
 <script>
     $('#datepicker-icon').click(function () {
-        $('#datepicker').datepicker('show');
-    });
-
-    $('#datepicker').datepicker({
-        dateFormat: 'yy-mm-dd',
-        minDate: new Date() // Sets minimum date to today
+        $("#datepicker").datepicker("show");
     });
 
     function handleDateChange() {
