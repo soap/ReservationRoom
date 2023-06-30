@@ -75,7 +75,6 @@
     }
 
     function handlePreviousWeek() {
-        console.log("test previous is doing");
         let path = window.location.pathname;
         let arr_path = path.split("/");
         if (arr_path.length == 2) {
@@ -304,9 +303,15 @@
         });
 
         cell.addEventListener('mouseover', () => {
-            if (isDragging && !selectedCells.includes(cell) && window.getComputedStyle(cell).getPropertyValue('background-color') === 'rgba(0, 0, 0, 0)') {
-                cell.classList.add('dragging');
-                selectedCells.push(cell);
+            if (isDragging && !selectedCells.includes(cell)) {
+                const lastSelectedCell = selectedCells[selectedCells.length - 1];
+                const lastSelectedCellRect = lastSelectedCell.getBoundingClientRect();
+                const cellRect = cell.getBoundingClientRect();
+
+                if (cellRect.left > lastSelectedCellRect.left && cellRect.top === lastSelectedCellRect.top) {
+                    cell.classList.add('dragging');
+                    selectedCells.push(cell);
+                }
             }
         });
     });
