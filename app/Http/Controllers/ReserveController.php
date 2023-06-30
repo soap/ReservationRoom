@@ -17,8 +17,8 @@ class ReserveController extends Controller
 {
     $search = $request->input('search');
     $data['Reservation'] = Reserve::where('title', 'LIKE', "%$search%")
-        ->orderByRaw("ABS(TIMESTAMPDIFF(SECOND, start_time, NOW()))")
-        ->paginate(5);
+    ->orderByRaw("TIMEDIFF(NOW() + INTERVAL 7 HOUR, start_time)")
+    ->paginate(5);
 
     return view('reserve.index', $data);
 }
