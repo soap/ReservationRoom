@@ -31,12 +31,10 @@ class ReserveController extends Controller
     public function store(ValidateReserve $request)
     {
         $temp = [];
+        $starttemp = Carbon::parse("{$request->date} {$request->start_time}");
+        $stoptemp = Carbon::parse("{$request->repeatTime} {$request->stop_time}");
         $start = Carbon::parse("{$request->date} {$request->start_time}");
-        $stop = Carbon::parse("{$request->repeatTime} {$request->stop_time}");
-        $repeatstart = Carbon::parse("{$request->date} {$request->start_time}");
-        $repeatstop = Carbon::parse("{$request->date} {$request->stop_time}");
-        $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
-        $stop_str = Carbon::parse("{$request->date} {$request->stop_time}")->format('Y-m-d H:i:s');
+        $stop = Carbon::parse("{$request->date} {$request->stop_time}");
         $particapant = $request->input('particapant');
         $room = Room::find($request->room_id);
         // dd($request);
@@ -48,7 +46,7 @@ class ReserveController extends Controller
         $checkperiod = Reserve::where('room_id', $request->room_id)->where('permission_status', '!=', 2)->get();
         foreach ($checkperiod as $period) {
             $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
-            $b = Period::make($start_str, $stop_str, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
+            $b = Period::make($start->format('Y-m-d H:i:s'), $stop->format('Y-m-d H:i:s'), Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
             if (($a->overlapsWith($b)) == true) {
                 return redirect()->route('timeslots')->with('time_error', 'The selected time has already been reserved. please try again.');
             }
@@ -60,18 +58,25 @@ class ReserveController extends Controller
         }
 
         if($request->toggle == 'on'){
-            for($i=$start; $i<=$stop; $i->addDays(7)){
+            for($i=$starttemp; $i<=$stoptemp; $i->addDays(7)){
+                foreach ($checkperiod as $period) {
+                    $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
+                    $b = Period::make($start->format('Y-m-d H:i:s'), $stop->format('Y-m-d H:i:s'), Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
+                    if (($a->overlapsWith($b)) == true) {
+                        return redirect()->route('timeslots')->with('time_error', 'some repeat time has already been reserved. please try again.');
+                    }
+                }
                 array_push($temp, [
                     'title' => $request->title,
                     'name' => $request->name,
                     'room_id' => $request->room_id,
-                    'start_time' => $repeatstart->format('Y-m-d H:i:s'),
-                    'stop_time' => $repeatstop->format('Y-m-d H:i:s'),
+                    'start_time' => $start->format('Y-m-d H:i:s'),
+                    'stop_time' => $stop->format('Y-m-d H:i:s'),
                     'participant' => $participant_str,
                     'permission_status' => $permission_status,
                 ]);
-                $repeatstart->addDays(7);
-                $repeatstop->addDays(7);
+                $start->addDays(7);
+                $stop->addDays(7);
             }
             // dd($temp);
             Reserve::insert($temp);
@@ -83,8 +88,8 @@ class ReserveController extends Controller
         $reserve->title = $request->title;
         $reserve->name = $request->name;
         $reserve->room_id = $request->room_id;
-        $reserve->start_time = $start_str;
-        $reserve->stop_time = $stop_str;
+        $reserve->start_time = $start;
+        $reserve->stop_time = $stop;
         $reserve->participant = $participant_str;
         $reserve->permission_status = $permission_status;
         $reserve->save();

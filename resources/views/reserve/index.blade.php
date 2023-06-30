@@ -51,7 +51,7 @@
                         <option value=1 @selected($reserve->permission_status == 1)>Pending</option>
                         <option value=2 @selected($reserve->permission_status == 2)>Cancel</option>
                     </select>
-                    <button class="btn btn-primary mt-2" onclick="handleButtonClick()" <?php if ($reserve->start_time <= date('Y-m-d H:i:s',time())) echo 'disabled'; ?>>Change Status</button>
+                    <button class="btn btn-primary mt-2" onclick="handleButtonClick({{ $reserve->id }})" <?php if ($reserve->start_time <= date('Y-m-d H:i:s',time())) echo 'disabled'; ?>>Change Status</button>
                 </td>
                 <td>
                     <form action="{{route('reserve.destroy', $reserve->id)}}" method="post">
@@ -68,14 +68,14 @@
     </div>
 </div>
 <script>
-    function handleButtonClick() {
+    function handleButtonClick(reserveId) {
         var selectedValue = document.getElementById("permission_status").value;
         if (selectedValue == 2) {
-            window.location.href = '{{ route("updateReserveStatus", ["id" => $reserve->id, "status" => "__status__"]) }}'.replace('__status__', selectedValue);
+            window.location.href = '{{ route("updateReserveStatus", ["id" => "__id__", "status" => "__status__"]) }}'.replace('__id__', reserveId).replace('__status__', selectedValue);
         } else if (selectedValue == 1) {
             window.location.href = '{{ route("reserve.index") }}';
         } else {
-            window.location.href = '{{ route("updateReserveStatus", ["id" => $reserve->id, "status" => "__status__"]) }}'.replace('__status__', selectedValue);
+            window.location.href = '{{ route("updateReserveStatus", ["id" => "__id__", "status" => "__status__"]) }}'.replace('__id__', reserveId).replace('__status__', selectedValue);
         }
     }
 </script>
