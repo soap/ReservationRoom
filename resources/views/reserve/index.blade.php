@@ -46,12 +46,12 @@
                 <td>{{$reserve->stop_time}}</td>
                 <td>{{$reserve->participant}}</td>
                 <td>
-                    <select class="form-select" id="permission_status" name="permission_status" <?php if ($reserve->start_time <= date('Y-m-d H:i:s',time())) echo 'disabled'; ?>>
+                    <select class="form-select" id="permission_status" name="permission_status" <?php if ($reserve->start_time <= date('Y-m-d H:i:s',time()+25200)) echo 'disabled'; ?>>
                         <option value=0 @selected($reserve->permission_status == 0)>Approval</option>
                         <option value=1 @selected($reserve->permission_status == 1)>Pending</option>
                         <option value=2 @selected($reserve->permission_status == 2)>Cancel</option>
                     </select>
-                    <button class="btn btn-primary mt-2" onclick="handleButtonClick({{ $reserve->id }})" <?php if ($reserve->start_time <= date('Y-m-d H:i:s',time())) echo 'disabled'; ?>>Change Status</button>
+                    <button class="btn btn-primary mt-2" onclick="handleButtonClick({{ $reserve->id }})" <?php if ($reserve->start_time <= date('Y-m-d H:i:s',time()+25200)) echo 'disabled'; ?>>Change Status</button>
                 </td>
                 <td>
                     <form action="{{route('reserve.destroy', $reserve->id)}}" method="post">

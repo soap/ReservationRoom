@@ -308,6 +308,8 @@
                 const lastSelectedCellRect = lastSelectedCell.getBoundingClientRect();
                 const cellRect = cell.getBoundingClientRect();
 
+                const sameRow = cell.parentNode === lastSelectedCell.parentNode;
+
                 if (cellRect.left > lastSelectedCellRect.left && cellRect.top === lastSelectedCellRect.top) {
                     cell.classList.add('dragging');
                     selectedCells.push(cell);
