@@ -30,11 +30,16 @@ class ReserveController extends Controller
 
     public function store(ValidateReserve $request)
     {
+        $temp = [];
+        $start = Carbon::parse("{$request->date} {$request->start_time}");
+        $stop = Carbon::parse("{$request->repeatTime} {$request->stop_time}");
+        $repeatstart = Carbon::parse("{$request->date} {$request->start_time}");
+        $repeatstop = Carbon::parse("{$request->date} {$request->stop_time}");
         $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
         $stop_str = Carbon::parse("{$request->date} {$request->stop_time}")->format('Y-m-d H:i:s');
         $particapant = $request->input('particapant');
         $room = Room::find($request->room_id);
-        // dd($room->max_participant);
+        // dd($request);
         if (count($particapant) > $room->max_participant) {
             return redirect()->route('timeslots')->with('time_error', 'Too many participant for a convention room. please choose another convention room.');
         }
@@ -52,6 +57,25 @@ class ReserveController extends Controller
         $permission_status = 0;
         if ($room->admin_permission == 1) {
             $permission_status = 1;
+        }
+
+        if($request->toggle == 'on'){
+            for($i=$start; $i<=$stop; $i->addDays(7)){
+                array_push($temp, [
+                    'title' => $request->title,
+                    'name' => $request->name,
+                    'room_id' => $request->room_id,
+                    'start_time' => $repeatstart->format('Y-m-d H:i:s'),
+                    'stop_time' => $repeatstop->format('Y-m-d H:i:s'),
+                    'participant' => $participant_str,
+                    'permission_status' => $permission_status,
+                ]);
+                $repeatstart->addDays(7);
+                $repeatstop->addDays(7);
+            }
+            // dd($temp);
+            Reserve::insert($temp);
+            return redirect()->route('room.index')->with('success', 'Repeat reserve has been created successfully.');
         }
 
         //create data

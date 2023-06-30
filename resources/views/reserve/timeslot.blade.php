@@ -105,7 +105,7 @@
     }
 </script>
 
-<div class="container">
+<div class="flex-container mx-5">
     @if ($message=Session::get('time_error'))
     <div class="alert alert-danger">
         <p> {{$message}}</p>

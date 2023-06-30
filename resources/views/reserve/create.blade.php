@@ -142,6 +142,21 @@
                 </div>
                 @endif
                 <div class="col-md-12">
+                    <div class="form-check form-switch">
+                        <strong>Repeat Reserve</strong>
+                        <input class="form-check-input" type="checkbox" role="switch" id="toggleSwitch" name="toggle">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="from-group" id="dateInput" style="display: none;">
+                        <input type="date" value="{{$formatteddate}}" name="repeatTime" class="form-control"
+                            placeholder="Repeat End Date" min="{{$formatteddate}}">
+                        @error('date')
+                        <div class="alert alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-12">
                     <button type="submit" class="mt-3 btn btn-primary">Submit</button>
                 </div>
             </div>
@@ -159,6 +174,17 @@
             placeholder: 'Search employees',
             width: '100%'
         });
+    });
+
+    const toggleSwitch = document.getElementById('toggleSwitch');
+    const dateInput = document.getElementById('dateInput');
+
+    toggleSwitch.addEventListener('change', function() {
+      if (this.checked) {
+        dateInput.style.display = 'block';
+      } else {
+        dateInput.style.display = 'none';
+      }
     });
 </script>
 @endsection
