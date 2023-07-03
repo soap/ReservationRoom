@@ -33,14 +33,6 @@
 $firstDate = reset($Days);
 $lastDate = end($Days);
 ?>
-<script>
-    $(function () {
-      $("#datepicker").datepicker({
-        dateFormat: 'yy-mm-dd',
-        minDate: new Date()
-      });
-    });
-  </script>
 <div class="container mb-3">
     <div class="d-flex justify-content-center">
         <h2>Reserve Convention Rooms</h2>
@@ -77,6 +69,13 @@ $lastDate = end($Days);
 </div>
 
 <script>
+        $(function () {
+      $("#datepicker").datepicker({
+        dateFormat: 'yy-mm-dd',
+        minDate: new Date()
+      });
+    });
+
     $('#datepicker-icon').click(function () {
         $("#datepicker").datepicker("show");
     });

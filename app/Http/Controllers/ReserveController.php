@@ -14,14 +14,32 @@ use Spatie\Period\Precision;
 class ReserveController extends Controller
 {
     public function index(Request $request)
-{
-    $search = $request->input('search');
-    $data['Reservation'] = Reserve::where('title', 'LIKE', "%$search%")
-    ->orderByRaw("TIMEDIFF(NOW() + INTERVAL 7 HOUR, start_time)")
-    ->paginate(5);
+    {
+        $search = $request->input('search');
+        $date = $request->input('date');
+        $thisMonth = $request->input('this_month');
 
-    return view('reserve.index', $data);
-}
+        $query = Reserve::query();
+
+        if ($search) {
+            $query->where('title', 'LIKE', "%$search%");
+        }
+
+        if ($date) {
+            $query->whereDate('start_time', '=', $date);
+        }
+
+        if ($thisMonth) {
+            $query->whereMonth('start_time', '=', date('m'))
+                ->whereYear('start_time', '=', date('Y'));
+        }
+
+        $query->orderBy('start_time', 'ASC');
+
+        $data['Reservation'] = $query->paginate(5);
+
+        return view('reserve.index', $data);
+    }
 
     public function create()
     {
@@ -57,8 +75,8 @@ class ReserveController extends Controller
             $permission_status = 1;
         }
 
-        if($request->toggle == 'on'){
-            for($i=$starttemp; $i<=$stoptemp; $i->addDays(7)){
+        if ($request->toggle == 'on') {
+            for ($i = $starttemp; $i <= $stoptemp; $i->addDays(7)) {
                 foreach ($checkperiod as $period) {
                     $a = Period::make($period->start_time, $period->stop_time, Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
                     $b = Period::make($start->format('Y-m-d H:i:s'), $stop->format('Y-m-d H:i:s'), Precision::HOUR(), boundaries: Boundaries::EXCLUDE_END());
@@ -163,7 +181,7 @@ class ReserveController extends Controller
             array_push($tempdate, $days_ago);
         }
         $start_time = $date->format('Y-m-d H:i:s');
-        $stop_time = date('Y-m-d', strtotime($start_time.' +6 day'));
+        $stop_time = date('Y-m-d', strtotime($start_time . ' +6 day'));
         $Reservations = Reserve::where('start_time', '>=', $start_time)->where('stop_time', '<=', $stop_time)->where('permission_status', '!=', 2)->get();
         $Days = $tempdate;
         $Rooms = Room::orderBy('id', 'asc')->get();

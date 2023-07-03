@@ -19,7 +19,9 @@
                 <form action="{{ route('reserve.index') }}" method="GET">
                     <div class="input-group mb-3">
                         <input type="text" name="search" class="form-control" placeholder="Search by Title..." value="{{ request()->input('search') }}">
+                        <input type="date" name="date" class="form-control" placeholder="Search by Date..." value="{{ request()->input('date') }}">
                         <button class="btn btn-outline-secondary" type="submit">Search</button>
+                        <button class="btn btn-outline-secondary" type="submit" name="this_month" value="{{ now()->format('Y-m') }}">This Month</button>
                     </div>
                 </form>
             </div>
