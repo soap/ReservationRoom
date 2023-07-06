@@ -7,7 +7,12 @@ import 'bootstrap';
  */
 
 import axios from 'axios';
+import moment from 'moment';
+
+window.moment = require('moment');
 window.axios = axios;
+
+console.log(moment().format('YYYY-MM-dd'));
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 

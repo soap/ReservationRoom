@@ -17,9 +17,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('room_id');
             $table->foreign('room_id')->references('id')->on('rooms');
+            $table->string('title');
             $table->string('name');
             $table->dateTime('start_time');
             $table->dateTime('stop_time');
+            $table->string('participant');
+            $table->integer('permission_status');
             $table->timestamps();
         });
     }

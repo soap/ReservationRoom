@@ -16,6 +16,10 @@ return new class extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('room_name');
+            $table->string('color');
+            $table->integer('max_participant');
+            $table->string('image')->nullable();
+            $table->boolean('admin_permission');
             $table->timestamps();
         });
     }

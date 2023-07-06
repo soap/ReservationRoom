@@ -24,21 +24,24 @@ class ValidateReserve extends FormRequest
     public function rules()
     {
         $todayDate = date('m/d/Y');
+
         return [
+            'title' => ['required'],
             'name' => ['required', 'string'],
-            'date' => ['date', 'after_or_equal:' . $todayDate],
+            'date' => ['date', 'after_or_equal:'.$todayDate],
             'start_time' => ['nullable', 'date_format:H:i'],
-            'stop_time' => ['nullable', 'date_format:H:i', 'after:start_time']
+            'stop_time' => ['nullable', 'date_format:H:i', 'after:start_time'],
         ];
     }
 
     public function messages()
     {
         return [
+            'title.required' => 'type your title',
             'name.required' => 'type your name',
             'date.required' => 'select date',
             'start_time' => 'select start time',
-            'stop_time' => 'select stop time'
+            'stop_time' => 'select stop time',
         ];
     }
 }
