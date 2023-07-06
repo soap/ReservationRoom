@@ -25,6 +25,8 @@ class ValidateRoom extends FormRequest
     {
         return [
             'name' => 'required|string|unique:rooms,room_name',
+            'color' => ['required', 'regex:/^(#(?:[0-9a-f]{2}){2,4}|#[0-9a-f]{3}|(?:rgba?|hsla?)\((?:\d+%?(?:deg|rad|grad|turn)?(?:,|\s)+){2,3}[\s\/]*[\d\.]+%?\))$/i'],
+            'max_participant' => 'required|integer|min:2',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
@@ -33,6 +35,8 @@ class ValidateRoom extends FormRequest
     {
         return [
             'name.required' => 'This room already exists.',
+            'color.required' => 'Color must been HEX, rgb, rgba, hsl or hsla',
+            'max_participant.required' => 'max participant must been integer and between 2 to 100',
             'image.required' => 'Image must by jpeg,png,jpg.gif,svg type',
         ];
     }

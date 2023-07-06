@@ -120,8 +120,8 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                        <strong>Particapant</strong>
-                        <select id="employeeSelect" class="form-control" name="particapant[]" multiple>
+                        <strong>Participant</strong>
+                        <select id="employeeSelect" class="form-control" name="participant[]" multiple>
                             @foreach($employees as $employee)
                             <option value="{{$employee->id}}">{{$employee->name}}</option>
                             @endforeach

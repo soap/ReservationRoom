@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ValidateReserve;
 use App\Models\Reserve;
 use App\Models\Room;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\Period\Boundaries;
@@ -48,12 +49,13 @@ class ReserveController extends Controller
 
     public function store(ValidateReserve $request)
     {
+        // dd($request);
         $temp = [];
         $starttemp = Carbon::parse("{$request->date} {$request->start_time}");
         $stoptemp = Carbon::parse("{$request->repeatTime} {$request->stop_time}");
         $start = Carbon::parse("{$request->date} {$request->start_time}");
         $stop = Carbon::parse("{$request->date} {$request->stop_time}");
-        $particapant = $request->input('particapant');
+        $particapant = $request->input('participant');
         $room = Room::find($request->room_id);
         // dd($request);
         if (count($particapant) > $room->max_participant) {
@@ -117,14 +119,16 @@ class ReserveController extends Controller
 
     public function edit(Reserve $reserve)
     {
-        return view('reserve.edit', compact('reserve'));
+        $employees = User::orderBy('id', 'asc')->get();
+        return view('reserve.edit', compact('reserve', 'employees'));
     }
 
     public function update(ValidateReserve $request, $id)
     {
+        // dd($request);
         $start_str = Carbon::parse("{$request->date} {$request->start_time}")->format('Y-m-d H:i:s');
         $stop_str = Carbon::parse("{$request->date} {$request->stop_time}")->format('Y-m-d H:i:s');
-        $particapant = $request->input('particapant');
+        $particapant = $request->input('participant');
         $room = Room::find($request->room_id);
         // dd($room->max_participant);
         if (count($particapant) > $room->max_participant) {
@@ -156,7 +160,7 @@ class ReserveController extends Controller
         $reserve->permission_status = $permission_status;
         $reserve->save();
 
-        return redirect()->route('reserve.index')->with('success', 'Reserve has been update successfully.');
+        return redirect()->route('room.index')->with('success', 'Reserve has been update successfully.');
     }
 
     public function destroy(Reserve $reserve)
