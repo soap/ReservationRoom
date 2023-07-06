@@ -22,7 +22,7 @@ jobs:
       env:
         DB_USERNAME: root
         DB_PASSWORD: root
-        DB_DATEBASE: laravel_reserve_testing
+        DB_DATABASE: laravel_reserve_testing
       run: |
         sudo /etc/init.d/mysql start
         mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USERNAME }} -p${{ env.DB_PASSWORD }}
