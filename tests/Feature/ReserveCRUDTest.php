@@ -36,8 +36,8 @@ class ReserveCRUDTest extends TestCase
             'room_id' => $room->id,
             'title' => 'Meeting 1',
             'name' => $user->name,
-            'start_time'=>'2023-07-06 16:30',
-            'stop_time'=>'2023-07-06 19:00',
+            'start_time'=>'2023-07-06 16:30:00',
+            'stop_time'=>'2023-07-06 19:00:00',
             'participant' => '1,2,3,4'
         ]);
         $response->assertRedirect('/room');
