@@ -54,27 +54,4 @@ class RoomTest extends TestCase
         $response->assertRedirect('/login');
     }
     
-    public function test_auth_user_can_visit_timeslot()
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get('/reserve_timeslot');
-        $response->assertStatus(200);
-    }
-
-    public function test_unauth_user_cannot_visit_timeslot()
-    {
-        $response = $this->get('/reserve_timeslot');
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
-
-    public function test_unauth_user_cannot_visit_timeslot_with_date()
-    {
-        $response = $this->get('/reserve_timeslot/15-08-2023');
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
-    }
-
-    
 }

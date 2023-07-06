@@ -13,4 +13,12 @@ class Room extends Model
     {
         return $this->hasMany('App\Models\Reseve');
     }
+
+    protected $fillable = [
+        'room_name',
+        'color',
+        'max_participant',
+        'image',
+        'admin_permission'
+    ];
 }

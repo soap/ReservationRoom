@@ -32,8 +32,8 @@ class ReserveFactory extends Factory
             "room_id" => $this->faker->randomElement($roomsIds),
             "title" => $this->faker->title(),
             "name" => $this->faker->name(),
-            "start_time" => $this->faker->dateTimeBetween('now', '+1 years')->format('Y-m-d H:i:s'),
-            "stop_time" => $this->faker->dateTimeBetween('now', '+1 years')->format('Y-m-d H:i:s'),
+            "start_time" => $this->faker->dateTimeBetween('now', '+10 days')->format('Y-m-d H:i:s'),
+            "stop_time" => $this->faker->dateTimeBetween('+10 days', '+10 days')->format('Y-m-d H:i:s'),
             "participant" => $this->faker->randomElement($usersIds),
             "permission_status" => $this->faker->numberBetween(0, 2)
         ];
