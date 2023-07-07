@@ -50,9 +50,12 @@ jobs:
 
     - name: Route list
       run: php artisan route:list
+      
+    - name: Run prop
+      run: npm run build
 
-    - name: Back Path
-      run: cd ..
+    - name: Check View Reserve
+      run: ls -l $PWD/resources/views/reserve
 
     - name: Check View Room
       run: ls -l $PWD/resources/views/room
