@@ -76,7 +76,6 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
         var calendar = $('#calendar').fullCalendar({
             eventRender: function (event, element) {
                 element.attr('title', 'Participant: ' + event.participant);

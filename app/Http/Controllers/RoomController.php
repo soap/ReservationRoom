@@ -62,7 +62,7 @@ class RoomController extends Controller
 
     public function edit(Room $room)
     {
-        return view('Room.edit', compact('room'));
+        return view('room.edit', compact('room'));
     }
 
     public function update(ValidateRoom $request, $id)
