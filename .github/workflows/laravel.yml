@@ -51,5 +51,8 @@ jobs:
     - name: Route list
       run: php artisan route:list
 
+    - name: Check View Room
+      run: ls -l $PWD/resources/views/room
+
     - name: Execute Feature test via Pest
       run: php artisan test
