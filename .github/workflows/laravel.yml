@@ -42,5 +42,8 @@ jobs:
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
 
+    - name: Route list
+      run: php artisan route:list
+
     - name: Execute Feature test via Pest
       run: php artisan test
