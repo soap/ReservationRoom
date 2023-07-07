@@ -28,7 +28,7 @@ class RoomTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/room');
+        $response = $this->actingAs($user)->get(route('room'));
         $response->assertStatus(200);
     }
 
@@ -43,7 +43,7 @@ class RoomTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/room');
+        $response = $this->actingAs($user)->get(route('room'));
         $response->assertStatus(200);
     }
 
