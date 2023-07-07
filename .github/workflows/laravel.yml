@@ -51,6 +51,9 @@ jobs:
     - name: Route list
       run: php artisan route:list
 
+    - name: Back Path
+      run: cd ..
+
     - name: Check View Room
       run: ls -l $PWD/resources/views/room
 
