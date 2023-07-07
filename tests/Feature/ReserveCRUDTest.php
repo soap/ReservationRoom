@@ -102,7 +102,7 @@ class ReserveCRUDTest extends TestCase
             'stop_time' => '19:00',
             'participant' => ['1', '2', '3', '4'],
             'toggle' => 'on',
-            'repeatTime' => '2023-07-20'
+            'repeatTime' => '2024-07-20'
         ]);
         $response->assertSessionHasNoErrors();
         $this->assertCount(3, Reserve::all());
@@ -137,7 +137,7 @@ class ReserveCRUDTest extends TestCase
             'stop_time' => '19:00',
             'participant' => ['1', '2', '3', '4'],
             'toggle' => 'on',
-            'repeatTime' => '2023-07-20'
+            'repeatTime' => '2024-07-20'
         ]);
         $response->assertSessionHasNoErrors();
         $this->assertCount(3, Reserve::all());
