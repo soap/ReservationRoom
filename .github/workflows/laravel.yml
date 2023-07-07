@@ -33,6 +33,9 @@ jobs:
     - name: Update Composer
       run: composer self-update --1
 
+    - name: Npm Install
+      run: npm install
+
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
@@ -41,6 +44,24 @@ jobs:
 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
+
+    - name: Clear Cache
+      run: php artisan cache:clear
+
+    - name: Clear Route
+      run: php artisan route:clear
+
+    - name: Route list
+      run: php artisan route:list
+      
+    - name: Run prop
+      run: npm run build
+
+    - name: Check View Reserve
+      run: ls -l $PWD/resources/views/reserve
+
+    - name: Check View Room
+      run: ls -l $PWD/resources/views/room
 
     - name: Execute Feature test via Pest
       run: php artisan test
